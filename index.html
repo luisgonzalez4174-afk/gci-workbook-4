@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>GCI Galaxy · Workbook 4 · Repaso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F0820;--bg2:#150B2E;--card:#1F1240;--card2:#281852;
+  --purple:#6A33A8;--purple-deep:#4B1F86;--magenta:#D44FA0;
+  --gold:#F5B342;--green:#4FCB8C;--red:#E8607A;
+  --ink:#F4EFFB;--ink-soft:#BCA9E0;--line:#3A2566;
+  --radius:18px;--radius-sm:12px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(ellipse 700px 500px at 12% -5%,rgba(212,79,160,.20),transparent 60%),
+    radial-gradient(ellipse 800px 600px at 90% 10%,rgba(106,51,168,.30),transparent 55%),
+    radial-gradient(ellipse 900px 700px at 50% 100%,rgba(245,179,66,.08),transparent 60%),
+    var(--bg);
+  color:var(--ink);font-family:'Manrope',sans-serif;min-height:100vh;overflow-x:hidden;position:relative;
+}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.stars span{position:absolute;border-radius:50%;opacity:.55;animation:twinkle 4s ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.8);}50%{opacity:.9;transform:scale(1.3);}}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+@keyframes popin{from{opacity:0;transform:scale(.85) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
+@keyframes shakeit{10%,90%{transform:translateX(-2px);}20%,80%{transform:translateX(3px);}30%,50%,70%{transform:translateX(-5px);}40%,60%{transform:translateX(5px);}}
+@keyframes burst{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0;}}
+@keyframes popscale{0%{transform:scale(1);}50%{transform:scale(1.18);}100%{transform:scale(1);}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,79,160,.6);}50%{box-shadow:0 0 0 10px rgba(212,79,160,0);}}
+@keyframes listening{0%,100%{transform:scale(1);background:var(--red);}50%{transform:scale(1.15);background:#ff2244;}}
+
+.wrap{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:18px 16px 90px;}
+
+/* ─── topbar ─── */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-badge{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,var(--purple),var(--purple-deep));display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 6px 18px rgba(106,51,168,.45),inset 0 0 0 1px rgba(255,255,255,.08);animation:floaty 5s ease-in-out infinite;}
+.brand-text h1{font-family:'Baloo 2',sans-serif;font-size:19px;margin:0;line-height:1.1;}
+.brand-text p{margin:1px 0 0;font-size:12px;color:var(--ink-soft);}
+.score-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);padding:8px 13px;border-radius:999px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;color:var(--gold);white-space:nowrap;}
+
+/* ─── hero ─── */
+.hero{background:linear-gradient(150deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);padding:20px 20px 18px;margin-bottom:22px;position:relative;overflow:hidden;}
+.hero::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;background:radial-gradient(circle,rgba(245,179,66,.25),transparent 70%);}
+.hero h2{font-family:'Baloo 2',sans-serif;font-size:22px;margin:0 0 6px;}
+.hero p{margin:0;color:var(--ink-soft);font-size:14.5px;line-height:1.5;}
+.hero .tag{display:inline-block;margin-top:12px;background:rgba(245,179,66,.14);color:var(--gold);border:1px solid rgba(245,179,66,.35);font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:999px;}
+
+/* ─── map path ─── */
+.path{position:relative;padding-left:26px;}
+.path::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:3px;background:repeating-linear-gradient(to bottom,var(--purple) 0 8px,transparent 8px 16px);border-radius:3px;}
+.node{position:relative;display:flex;align-items:center;gap:14px;margin-bottom:14px;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;transition:transform .15s,border-color .15s,background .15s;animation:popin .4s ease both;}
+.node:hover{border-color:var(--purple);background:var(--card2);}
+.node:active{transform:scale(.98);}
+.node::before{content:"";position:absolute;left:-21px;top:50%;transform:translateY(-50%);width:13px;height:13px;border-radius:50%;background:var(--bg2);border:3px solid var(--purple);}
+.node.done::before{background:var(--gold);border-color:var(--gold);}
+.node .nbadge{width:46px;height:46px;flex:none;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.node .ninfo{flex:1;min-width:0;}
+.node .ninfo h3{font-family:'Baloo 2',sans-serif;font-size:15px;margin:0 0 2px;line-height:1.25;}
+.node .ninfo p{margin:0;font-size:12px;color:var(--ink-soft);}
+.node .nstat{font-family:'Baloo 2',sans-serif;font-size:12px;font-weight:700;color:var(--ink-soft);text-align:right;flex:none;}
+.node.done .nstat{color:var(--green);}
+.node .nnum{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;color:var(--ink-soft);min-width:20px;}
+
+/* ─── topic view ─── */
+.topicview{display:none;}
+.topicview.active{display:block;animation:popin .35s ease both;}
+.backbtn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--ink);font-family:'Manrope';font-weight:700;font-size:13.5px;padding:8px 13px;border-radius:999px;cursor:pointer;margin-bottom:14px;}
+.backbtn:hover{border-color:var(--purple);}
+.thead{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.thead .nbadge{width:54px;height:54px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none;}
+.thead h2{font-family:'Baloo 2',sans-serif;font-size:21px;margin:0;}
+.thead span{display:block;font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+
+/* ─── cards ─── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 17px;margin-bottom:14px;}
+.card h4{font-family:'Baloo 2',sans-serif;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;display:flex;align-items:center;gap:6px;}
+.explain p{margin:0 0 10px;font-size:14.5px;line-height:1.65;color:#EAE3F7;}
+.explain p:last-child{margin-bottom:0;}
+.explain b{color:var(--gold);}
+.ex-en{color:#fff;background:rgba(106,51,168,.35);padding:1px 6px;border-radius:6px;font-weight:600;}
+.sectionlabel{font-family:'Baloo 2',sans-serif;font-size:13px;color:var(--magenta);margin:0 0 6px;font-weight:700;}
+.reftable{width:100%;border-collapse:collapse;font-size:13px;margin:2px 0 16px;}
+.reftable th{background:rgba(106,51,168,.35);color:var(--gold);text-align:left;padding:8px 9px;font-family:'Baloo 2',sans-serif;font-size:11.5px;text-transform:uppercase;}
+.reftable td{padding:8px 9px;border-top:1px solid var(--line);color:#EAE3F7;}
+.reftable td.formcol{color:var(--green);font-weight:700;}
+.reftable tr:nth-child(even) td{background:rgba(255,255,255,.025);}
+.rulecards{display:flex;flex-direction:column;gap:10px;margin:2px 0 16px;}
+.rulecard{border:1px solid rgba(79,203,140,.4);background:rgba(79,203,140,.07);border-radius:12px;padding:11px 13px;}
+.rulecard .rulehead{display:block;color:var(--green);font-family:'Baloo 2',sans-serif;font-size:13px;margin-bottom:4px;}
+.rulecard .ruleformula{font-size:14px;color:#fff;margin-bottom:3px;}
+.rulecard .ruleex{font-size:12.5px;color:var(--ink-soft);}
+.keynote{border:1px solid rgba(245,179,66,.4);background:rgba(245,179,66,.07);border-radius:12px;padding:12px 14px;margin:2px 0 4px;}
+.keynote .keyhead{display:block;color:var(--gold);font-family:'Baloo 2',sans-serif;font-size:13.5px;margin-bottom:6px;}
+.keynote .keyrow{font-size:13.5px;color:#EAE3F7;margin-bottom:5px;line-height:1.5;}
+.keynote .keyrow:last-child{margin-bottom:0;color:var(--green);font-weight:700;}
+
+/* ─── video ─── */
+.videoplaceholder{position:relative;width:100%;padding-top:56.25%;border-radius:var(--radius-sm);overflow:hidden;background:#000;cursor:pointer;}
+.videoplaceholder img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.78;}
+.videoplaceholder .playbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;background:rgba(212,79,160,.92);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;box-shadow:0 8px 22px rgba(0,0,0,.45);}
+.videoplaceholder .playlabel{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(15,8,32,.7);color:#fff;font-size:11px;font-weight:700;padding:5px 9px;border-radius:8px;text-align:center;}
+.videowrap{position:relative;width:100%;padding-top:56.25%;border-radius:var(--radius-sm);overflow:hidden;background:#000;}
+.videowrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.videonote{font-size:12px;color:var(--ink-soft);margin-top:8px;}
+.videofallback{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12.5px;font-weight:700;color:var(--gold);text-decoration:none;border:1px solid rgba(245,179,66,.35);padding:7px 12px;border-radius:999px;}
+
+/* ─── pronunciation tool ─── */
+.toolhint{font-size:12.5px;color:var(--ink-soft);margin:0 0 10px;}
+.toolgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:7px;margin-bottom:10px;}
+.toolbtn{background:linear-gradient(145deg,var(--purple),var(--purple-deep));color:#fff;border:none;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;padding:11px 4px;border-radius:10px;cursor:pointer;}
+.toolbtn:active{transform:scale(.92);}
+.toolbtn.playing{animation:popscale .35s ease;background:linear-gradient(145deg,var(--magenta),var(--purple));}
+.tooldisplay{min-height:28px;font-family:'Baloo 2',sans-serif;font-size:17px;font-weight:700;color:var(--green);text-align:center;padding:6px;}
+.toolwarn{display:none;margin-top:6px;font-size:12px;color:var(--gold);background:rgba(245,179,66,.1);border:1px solid rgba(245,179,66,.3);border-radius:9px;padding:8px 10px;}
+.toolwarn.show{display:block;}
+
+/* ─── vocab grid (new stations) ─── */
+.vocabgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;margin-bottom:6px;}
+.vocabcard{background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:10px 6px;text-align:center;cursor:pointer;transition:.12s;}
+.vocabcard:hover{border-color:var(--purple);}
+.vocabcard.playing{border-color:var(--magenta);background:rgba(212,79,160,.1);}
+.vocabcard .vcemoji{font-size:24px;display:block;margin-bottom:4px;}
+.vocabcard .vcword{font-size:11.5px;font-weight:700;color:#fff;display:block;}
+.vocabcard .vcpron{font-size:10px;color:var(--ink-soft);display:block;margin-top:1px;}
+.vcategory{font-family:'Baloo 2',sans-serif;font-size:12px;font-weight:700;color:var(--gold);margin:10px 0 6px;letter-spacing:.03em;text-transform:uppercase;}
+
+/* ─── exercises ─── */
+.exo{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 17px;margin-bottom:13px;}
+.exo .exo-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.exo .exo-tag{font-family:'Baloo 2',sans-serif;font-size:11.5px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;}
+.exo .exo-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;flex:none;}
+.exo.solved .exo-check{background:var(--green);border-color:var(--green);color:#0F0820;}
+.exo .qtext{font-size:15px;font-weight:600;margin:0 0 12px;line-height:1.5;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opts.emoji-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px;}
+.opt{text-align:left;background:var(--bg2);border:1.5px solid var(--line);color:var(--ink);font-family:'Manrope';font-size:14px;font-weight:600;padding:11px 13px;border-radius:11px;cursor:pointer;transition:.12s;}
+.opt.opt-emoji{text-align:center;font-size:28px;padding:12px 4px;}
+.opt:hover{border-color:var(--purple);}
+.opt.correct{background:rgba(79,203,140,.18);border-color:var(--green);color:var(--green);}
+.opt.wrong{background:rgba(232,96,122,.18);border-color:var(--red);color:var(--red);animation:shakeit .4s;}
+.opt:disabled{cursor:default;}
+.tfrow{display:flex;gap:10px;}
+.tfrow .opt{flex:1;text-align:center;}
+.fillrow{display:flex;gap:8px;flex-wrap:wrap;}
+.fillrow input{flex:1;min-width:160px;background:var(--bg2);border:1.5px solid var(--line);color:var(--ink);font-family:'Manrope';font-size:14.5px;font-weight:600;padding:11px 13px;border-radius:11px;}
+.fillrow input:focus{outline:none;border-color:var(--purple);}
+.fillrow input.correct{border-color:var(--green);background:rgba(79,203,140,.12);}
+.fillrow input.wrong{border-color:var(--red);animation:shakeit .4s;}
+.checkbtn{margin-top:10px;background:linear-gradient(145deg,var(--magenta),var(--purple));color:#fff;border:none;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:11px;cursor:pointer;}
+.checkbtn:disabled{opacity:.45;cursor:default;}
+.fb{margin-top:9px;font-size:13px;font-weight:600;border-radius:9px;padding:8px 11px;}
+.fb.ok{background:rgba(79,203,140,.14);color:var(--green);}
+.fb.no{background:rgba(232,96,122,.14);color:var(--red);}
+.matchgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.matchcol{display:flex;flex-direction:column;gap:8px;}
+.matchitem{background:var(--bg2);border:1.5px solid var(--line);color:var(--ink);font-family:'Manrope';font-size:12.5px;font-weight:600;padding:10px 8px;border-radius:10px;cursor:pointer;text-align:center;line-height:1.3;}
+.matchitem.sel{border-color:var(--gold);background:rgba(245,179,66,.14);}
+.matchitem.matched{border-color:var(--green);background:rgba(79,203,140,.16);color:var(--green);cursor:default;}
+.matchitem.wrong{border-color:var(--red);animation:shakeit .35s;}
+
+/* ─── ORDER type ─── */
+.order-pool{display:flex;flex-wrap:wrap;gap:7px;min-height:44px;background:rgba(0,0,0,.18);border:1.5px dashed var(--line);border-radius:11px;padding:9px 10px;margin-bottom:9px;}
+.order-answer{display:flex;flex-wrap:wrap;gap:7px;min-height:44px;background:rgba(106,51,168,.1);border:1.5px solid var(--purple);border-radius:11px;padding:9px 10px;margin-bottom:9px;}
+.order-answer.empty{background:rgba(106,51,168,.05);}
+.chip{background:linear-gradient(145deg,var(--purple),var(--purple-deep));color:#fff;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;padding:7px 12px;border-radius:8px;cursor:pointer;border:none;transition:.12s;user-select:none;}
+.chip:hover{filter:brightness(1.15);}
+.chip.in-answer{background:linear-gradient(145deg,var(--magenta),var(--purple));}
+.chip.chip-correct{background:linear-gradient(145deg,var(--green),#2ca06a);color:#0F0820;}
+.chip.chip-wrong{background:linear-gradient(145deg,var(--red),#b03050);animation:shakeit .4s;}
+.order-labels{display:flex;gap:8px;font-size:11px;color:var(--ink-soft);margin-bottom:5px;}
+.order-labels span{flex:1;}
+
+/* ─── SPEAK type ─── */
+.speak-phrase{background:rgba(106,51,168,.18);border:1px solid var(--purple);border-radius:12px;padding:14px 16px;margin-bottom:12px;text-align:center;}
+.speak-phrase .phrase-text{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:700;color:#fff;display:block;margin-bottom:4px;}
+.speak-phrase .phrase-tr{font-size:12.5px;color:var(--ink-soft);}
+.speak-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.micbtn{width:54px;height:54px;border-radius:50%;background:var(--magenta);border:none;color:#fff;font-size:22px;cursor:pointer;flex:none;transition:.12s;box-shadow:0 4px 14px rgba(212,79,160,.4);}
+.micbtn:hover{filter:brightness(1.1);}
+.micbtn.recording{animation:listening .7s ease-in-out infinite;box-shadow:0 0 0 4px rgba(232,96,122,.35);}
+.speak-transcript{flex:1;min-width:120px;background:var(--bg2);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--ink-soft);min-height:40px;}
+.speak-result{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.speak-markbtn{background:none;border:1.5px solid var(--green);color:var(--green);font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;padding:9px 14px;border-radius:10px;cursor:pointer;}
+.speak-markbtn:hover{background:rgba(79,203,140,.1);}
+.speak-playbtn{background:none;border:1.5px solid var(--purple);color:var(--ink);font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;padding:9px 14px;border-radius:10px;cursor:pointer;}
+.speak-status{font-size:12px;color:var(--ink-soft);margin-top:7px;font-style:italic;}
+
+/* ─── CHAT station ─── */
+.chat-header{background:linear-gradient(145deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;}
+.chat-header h3{font-family:'Baloo 2',sans-serif;font-size:17px;margin:0 0 6px;}
+.chat-header p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.5;}
+.scenario-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.scenario-pill{background:var(--bg2);border:1.5px solid var(--line);color:var(--ink);font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12.5px;padding:8px 13px;border-radius:999px;cursor:pointer;transition:.12s;}
+.scenario-pill.active{border-color:var(--gold);background:rgba(245,179,66,.12);color:var(--gold);}
+.chatbox{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;}
+.chat-messages{max-height:380px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.chat-msg{max-width:85%;display:flex;gap:8px;align-items:flex-end;}
+.chat-msg.bot{align-self:flex-start;}
+.chat-msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.chat-bubble{padding:11px 14px;border-radius:14px;font-size:14px;line-height:1.5;}
+.chat-msg.bot .chat-bubble{background:var(--card2);border-bottom-left-radius:4px;}
+.chat-msg.user .chat-bubble{background:linear-gradient(135deg,var(--purple),var(--purple-deep));border-bottom-right-radius:4px;}
+.chat-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(145deg,var(--magenta),var(--purple));display:flex;align-items:center;justify-content:center;font-size:14px;flex:none;}
+.chat-hint{font-size:12px;color:var(--ink-soft);font-style:italic;margin-top:4px;}
+.chat-speak-btn{background:none;border:none;color:var(--gold);font-size:16px;cursor:pointer;padding:2px 4px;opacity:.7;}
+.chat-speak-btn:hover{opacity:1;}
+.chat-input-area{border-top:1px solid var(--line);padding:12px 14px;display:flex;gap:8px;align-items:center;}
+.chat-input{flex:1;background:var(--card);border:1.5px solid var(--line);color:var(--ink);font-family:'Manrope';font-size:14px;font-weight:500;padding:10px 13px;border-radius:11px;}
+.chat-input:focus{outline:none;border-color:var(--purple);}
+.chat-micbtn{width:42px;height:42px;border-radius:50%;background:var(--magenta);border:none;color:#fff;font-size:18px;cursor:pointer;flex:none;}
+.chat-micbtn.recording{animation:listening .7s ease-in-out infinite;}
+.chat-sendbtn{background:linear-gradient(145deg,var(--magenta),var(--purple));color:#fff;border:none;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;padding:10px 16px;border-radius:11px;cursor:pointer;white-space:nowrap;}
+.suggestions{padding:10px 14px 12px;display:flex;flex-wrap:wrap;gap:7px;border-top:1px solid var(--line);}
+.sugg-pill{background:rgba(106,51,168,.25);border:1px solid rgba(106,51,168,.5);color:var(--ink);font-family:'Manrope';font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:999px;cursor:pointer;transition:.12s;}
+.sugg-pill:hover{border-color:var(--magenta);background:rgba(212,79,160,.18);}
+.chat-progress{font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;color:var(--gold);padding:8px 14px;border-top:1px solid var(--line);}
+
+.donebar{display:none;align-items:center;gap:10px;background:linear-gradient(145deg,rgba(79,203,140,.18),rgba(79,203,140,.06));border:1px solid rgba(79,203,140,.4);color:var(--green);font-family:'Baloo 2',sans-serif;font-weight:700;padding:13px 16px;border-radius:var(--radius);margin-top:6px;font-size:14.5px;}
+.donebar.show{display:flex;animation:popin .4s ease both;}
+footer{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:30px;opacity:.7;}
+@media(min-width:560px){.hero h2{font-size:25px;}}
+</style>
+</head>
+<body>
+<div class="stars" id="starfield"></div>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-badge">🪐</div>
+      <div class="brand-text"><h1>GCI Galaxy</h1><p>Misión de Repaso · WB4</p></div>
+    </div>
+    <div class="score-pill">⭐ <span id="scoreText">0/0</span></div>
+  </div>
+
+  <div id="mapview">
+    <div class="hero">
+      <h2>¡Hola, cadete! 🚀</h2>
+      <p>Repaso completo del <b>GCI Workbook 4 (B1+)</b> — 36 estaciones con vocabulario avanzado, gramática intermedia-alta, pronunciación y conversación real.</p>
+      <span class="tag">Repaso · Workbook 4 · Nivel B1+ · GCI Galaxy</span>
+    </div>
+    <div class="path" id="pathList"></div>
+  </div>
+
+  <div class="topicview" id="topicview">
+    <button class="backbtn" onclick="goMap()">← Volver al mapa</button>
+    <div class="thead">
+      <div class="nbadge" id="tvBadge"></div>
+      <div><h2 id="tvTitle"></h2><span id="tvSub"></span></div>
+    </div>
+    <div class="card explain" id="tvExplainCard">
+      <h4>🛰️ Explicación</h4>
+      <div id="tvExplainBody"></div>
+    </div>
+    <div class="card" id="tvVideoCard">
+      <h4>🎬 Video</h4>
+      <div id="tvVideoWrap"></div>
+      <div class="videonote" id="tvVideoNote"></div>
+      <a class="videofallback" id="tvVideoFallback" href="#" target="_blank" rel="noopener">▶ Ver en YouTube</a>
+    </div>
+    <div class="card" id="tvToolCard" style="display:none;">
+      <h4>🔊 Pronunciación interactiva</h4>
+      <div id="tvToolBody"></div>
+    </div>
+    <div class="card" id="tvVocabCard" style="display:none;">
+      <h4>📚 Vocabulario — toca para escuchar</h4>
+      <div id="tvVocabBody"></div>
+    </div>
+    <div id="tvExercises"></div>
+    <!-- CHAT STATION CONTAINER -->
+    <div id="tvChatSection" style="display:none;">
+      <div class="chat-header">
+        <h3>💬 Sala de Conversación</h3>
+        <p>Practica en inglés con tu compañero virtual Alex. Elige un escenario y empieza a hablar — usa el micrófono 🎤 o escribe.</p>
+        <div class="scenario-pills" id="scenarioPills"></div>
+      </div>
+      <div class="chatbox">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="suggestions" id="chatSuggestions"></div>
+        <div class="chat-progress" id="chatProgress"></div>
+        <div class="chat-input-area">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Type your answer in English..." autocomplete="off">
+          <button class="chat-micbtn" id="chatMicBtn" title="Hablar">🎤</button>
+          <button class="chat-sendbtn" onclick="chatSend()">Send →</button>
+        </div>
+      </div>
+    </div>
+    <div class="donebar" id="tvDone">🌟 ¡Estación completada! Excelente trabajo, cadete.</div>
+  </div>
+
+  <footer>Material de repaso para los alumnos de GCI Galaxy · Centro de Idiomas · Basado en GCI Workbook 4</footer>
+</div>
+<script>
+(function(){
+  const sf=document.getElementById('starfield');
+  for(let i=0;i<55;i++){
+    const s=document.createElement('span');
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    s.style.animationDelay=(Math.random()*4)+'s';
+    const sz=(Math.random()*2+1.5)+'px';
+    s.style.width=s.style.height=sz;
+    sf.appendChild(s);
+  }
+})();
+</script>
+<script>
+const COLORS=["#27AE60","#3498DB","#E91E63","#F39C12","#9B59B6","#1ABC9C","#E74C3C","#2C3E50","#D44FA0","#F5B342","#5B7FE8","#6A33A8","#3FB8AF","#E8607A","#FF9800","#607D8B"];
+
+const TOPICS=[
+
+{id:"etiquette",num:1,title:"Etiquette Vocabulary",emoji:"🏛️",cardDesc:"Manners, cultural customs and polite behavior",isVocab:true,
+explain:[
+"<p><b>Etiquette</b> is the set of rules for polite behavior in society. Understanding cultural etiquette is important when traveling or meeting people from other countries.</p>",
+"<p>Key words: <span class='ex-en'>etiquette · cultural literacy · table manners · punctuality · customary · taboo · impolite · offensive</span></p>",
+"<p>Example: <span class='ex-en'>It's taboo to discuss salaries at a dinner party. Punctuality is customary in business meetings.</span></p>"
+],
+video:"xpE2mW5b454",videoNote:"Social Etiquette and Cultural Customs in English",
+vocab:[
+{cat:"🏛️ Manners & Customs",items:[
+{e:"📋",w:"etiquette",p:"étikét"},{e:"🌍",w:"cultural literacy",p:"kólchöröl lítörösi"},
+{e:"🍽️",w:"table manners",p:"téibôl mánörz"},{e:"⏰",w:"punctuality",p:"ponkchöuálöti"},
+{e:"🤝",w:"customary",p:"kóstömeri"},{e:"🚫",w:"taboo",p:"tôbúu"},
+{e:"😠",w:"impolite",p:"impöláit"},{e:"😤",w:"offensive",p:"öfénsiv"}
+]}
+],
+exercises:[
+{type:"mcq",q:"'It's taboo to discuss salaries at dinner.' What does 'taboo' mean?",options:["Customary and expected","Strictly forbidden by cultural rules","A little rude but acceptable","Very polite"],correct:1},
+{type:"match",q:"Match the word with its definition.",pairs:[["punctuality","being on time"],["table manners","rules for eating politely"],["cultural literacy","knowing other cultures"],["etiquette","rules for polite behavior"]]},
+{type:"fill",q:"In Japan, it's ____ to take off your shoes before entering a home.",answers:["customary"]},
+{type:"fill",q:"Talking with food in your mouth is considered ____.",answers:["impolite","rude","offensive"]},
+{type:"tf",q:"'Cultural literacy' means knowing about and respecting other cultures.",correct:true},
+{type:"mcq",q:"Which behavior is most 'offensive' at a formal dinner?",options:["Arriving 5 minutes early","Talking with your mouth full","Using the wrong fork","Saying thank you too much"],correct:1},
+{type:"speak",phrase:"It's customary in my country to greet people with a handshake. Using first names can be impolite.",translation:"En mi país es costumbre saludar con un apretón de manos. Usar el nombre de pila puede ser una falta de cortesía."},
+{type:"order",q:"Order the sentence:",words:["taboo","some","It's","to","cultures.","in","eat","pork"],correct:"It's taboo to eat pork in some cultures."}
+]},
+
+{id:"tagquestions",num:2,title:"Tag Questions",emoji:"❓",cardDesc:"isn't it? / aren't you? / haven't they? — confirming info",
+explain:[
+"<p><b>Tag questions</b> are short questions added at the end of a statement to confirm information or encourage conversation.</p>",
+"<p><b>Rule:</b> Affirmative statement → <b>negative tag</b>. Negative statement → <b>affirmative tag.</b></p>",
+"<p>Examples: <span class='ex-en'>It's a beautiful day, <b>isn't it?</b> / She speaks Thai, <b>doesn't she?</b> / You're not Amy, <b>are you?</b> / We didn't know, <b>did we?</b></span></p>",
+"<p>Use the same auxiliary verb as the statement: <span class='ex-en'>They'll be here, <b>won't they?</b> / She hasn't been here long, <b>has she?</b></span></p>"
+],
+video:"JBoU2PoYp3c",videoNote:"Tag Questions in English — Complete Lesson",
+exercises:[
+{type:"fill",q:"It's a beautiful day, ____ ____? (tag question)",answers:["isn't it"]},
+{type:"mcq",q:"'She speaks Thai, ____ ____?' — choose the correct tag:",options:["does she?","doesn't she?","isn't she?","wasn't she?"],correct:1},
+{type:"fill",q:"You're not leaving yet, ____ ____?",answers:["are you"]},
+{type:"match",q:"Match the statement with its correct tag.",pairs:[["They left early,","didn't they?"],["She hasn't arrived,","has she?"],["It won't be long,","will it?"],["You were there,","weren't you?"]]},
+{type:"tf",q:"A negative statement uses a negative tag. (e.g. 'You don't know, don't you?')",correct:false},
+{type:"order",q:"Form the tag question:",words:["meeting,","was","it?","great","wasn't","The"],correct:"The meeting was great, wasn't it?"},
+{type:"mcq",q:"'We haven't forgotten anything, ____?'",options:["haven't we?","have we?","didn't we?","don't we?"],correct:1},
+{type:"speak",phrase:"Nice weather today, isn't it? You're from Spain, aren't you? We've met before, haven't we?",translation:"Lindo clima hoy, ¿verdad? Eres de España, ¿no? Nos hemos conocido antes, ¿no?"}
+]},
+
+{id:"pastperfect",num:3,title:"Past Perfect",emoji:"⏮️",cardDesc:"had + participle — events before other past events",
+explain:[
+"<p>The <b>Past Perfect</b> describes an action that happened <b>before</b> another past action or before a specific time in the past.</p>",
+"<p>Form: <b>had + past participle</b></p>",
+"<p><span class='ex-en'>Our flight <b>had arrived</b> by noon. / The meeting <b>hadn't begun</b> when we arrived.</span></p>",
+"<p>Use with: <b>already, yet, by, before, after, when, by the time</b></p>",
+"<p><span class='ex-en'>By 9:00 I <b>had already</b> registered for class. / When I got to class, I <b>hadn't eaten</b> yet.</span></p>"
+],
+video:"dkfGCdEkGPQ",videoNote:"Past Perfect Tense — Complete English Lesson",
+exercises:[
+{type:"fill",q:"By the time she arrived, the meeting ____ already started.",answers:["had"]},
+{type:"mcq",q:"'When the tour started, Ann had already met Kazuko.' Which happened FIRST?",options:["The tour started.","Ann and Kazuko met.","They both happened at the same time."],correct:1},
+{type:"fill",q:"I ____ never eaten Thai food before that trip.",answers:["had"]},
+{type:"match",q:"Choose what happened first (Past Perfect).",pairs:[["The meeting had ended late, so...","The meeting ended (first)"],["When I got to class, I hadn't eaten...","I hadn't eaten (ongoing before class)"],["By April, she had started her new job...","She started the job (first)"],["After I learned to present, they promoted me...","I learned to present (first)"]]},
+{type:"tf",q:"'By 9:00, I had already taken the placement test.' This means he took the test before 9:00.",correct:true},
+{type:"order",q:"Order the sentence:",words:["hadn't","We","yet","when","begun","the","meeting","arrived.","we"],correct:"We hadn't begun the meeting yet when we arrived."},
+{type:"speak",phrase:"By the time I got home, I had already eaten dinner and finished all my work.",translation:"Para cuando llegué a casa, ya había cenado y terminado todo mi trabajo."},
+{type:"mcq",q:"'She ____ already left before I called her.' Correct form:",options:["has","had","have","was"],correct:1}
+]},
+
+{id:"symptoms",num:4,title:"Symptoms Vocabulary",emoji:"🤒",cardDesc:"dizzy, nauseous, wheezing — health vocabulary",isVocab:true,
+explain:[
+"<p>When you visit a doctor, you need to describe your <b>symptoms</b> — how you feel and where it hurts.</p>",
+"<p><span class='ex-en'>I feel dizzy. / I've been vomiting. / I'm short of breath. / My chest hurts.</span></p>"
+],
+video:"k7PJGKemNzM",videoNote:"Health Vocabulary — Describing Symptoms in English",
+vocab:[
+{cat:"🤒 How You Feel",items:[
+{e:"😵",w:"dizzy",p:"dízi"},{e:"🤢",w:"nauseous",p:"nóshös"},
+{e:"😴",w:"weak",p:"wiik"},{e:"😮‍💨",w:"short of breath",p:"short öv breth"},
+{e:"🤮",w:"vomiting",p:"vómiting"},{e:"🤧",w:"sneezing",p:"sníizing"},
+{e:"😮",w:"wheezing",p:"wíizing"},{e:"🫁",w:"coughing",p:"kófing"}
+]},
+{cat:"📍 Pain Location",items:[
+{e:"💔",w:"chest pain",p:"chest pein"},{e:"🦴",w:"hip pain",p:"jip pein"},
+{e:"🫀",w:"rib pain",p:"rib pein"},{e:"🤜",w:"stomach pain",p:"stómök pein"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the symptom with its description.",pairs:[["dizzy","feeling like the room is spinning"],["nauseous","feeling like you're going to vomit"],["wheezing","breathing with a whistling sound"],["short of breath","difficulty breathing"]]},
+{type:"mcq",q:"'I've been coughing and wheezing for two days.' Where is the problem?",options:["Stomach","Head","Chest and lungs","Hip"],correct:2},
+{type:"fill",q:"I feel very ____. The room is spinning around me.",answers:["dizzy"]},
+{type:"tf",q:"'I'm short of breath' means you have difficulty breathing.",correct:true},
+{type:"fill",q:"She's been ____ all morning. She might have a stomach flu.",answers:["vomiting"]},
+{type:"speak",phrase:"Doctor, I've been feeling dizzy and nauseous since yesterday. I also have pain in my chest.",translation:"Doctor, me he sentido mareado y con náuseas desde ayer. También tengo dolor en el pecho."},
+{type:"mcq",q:"Which symptom is associated with allergies?",options:["vomiting","sneezing","wheezing","all of the above"],correct:3},
+{type:"fill",q:"He was so ____ he couldn't get out of bed this morning.",answers:["weak"]}
+]},
+
+{id:"medicalprocedures",num:5,title:"Medical Procedures",emoji:"🏥",cardDesc:"checkup, injection, EKG, X-ray, blood test",isVocab:true,
+explain:[
+"<p>When you visit a doctor or clinic, they may recommend various <b>medical procedures</b>.</p>",
+"<p><span class='ex-en'>I need to make an appointment for a <b>blood test</b>. / The doctor ordered an <b>X-ray</b>.</span></p>",
+"<p>Making appointments: <span class='ex-en'>I was wondering if I might be able to come in early next week. / Would you be able to see me at 10:00?</span></p>"
+],
+video:"r4wLXNydzeY",videoNote:"Medical English — Procedures and Appointments",
+vocab:[
+{cat:"🏥 Procedures",items:[
+{e:"🩺",w:"checkup / examination",p:"chékop / egzaminéishön"},
+{e:"💉",w:"shot / injection",p:"shot / inchékshön"},
+{e:"❤️",w:"EKG / electrocardiogram",p:"iii-kei-yii"},
+{e:"🦴",w:"X-ray",p:"éks-rei"},
+{e:"🩸",w:"blood test",p:"blod test"},
+{e:"🔬",w:"biopsy",p:"báiopsi"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the procedure with what it checks.",pairs:[["X-ray","bones and lungs"],["EKG","heart activity"],["blood test","infections and glucose"],["checkup","general health"]]},
+{type:"fill",q:"Hello, I need to make an appointment for a ____ ____.",answers:["blood test"]},
+{type:"mcq",q:"'I was wondering if I might be able to come in early next week.' This is:",options:["A polite way to request an appointment","A command to the doctor","A complaint about the clinic"],correct:0},
+{type:"fill",q:"The doctor took an X-____ of my chest to check my lungs.",answers:["ray"]},
+{type:"speak",phrase:"I need to make an appointment for a blood test. I was wondering if I could come in on Tuesday morning.",translation:"Necesito hacer una cita para un análisis de sangre. Me preguntaba si podría venir el martes por la mañana."},
+{type:"tf",q:"A 'checkup' is the same as an 'injection'.",correct:false},
+{type:"mcq",q:"Which procedure involves inserting a needle into a vein?",options:["EKG","X-ray","blood test","checkup"],correct:2},
+{type:"fill",q:"The doctor said I need a complete ____. She wants to check everything.",answers:["checkup","examination"]}
+]},
+
+{id:"modalmust",num:6,title:"Modal MUST — Drawing Conclusions",emoji:"💊",cardDesc:"must be / must not be — what you think is probably true",
+explain:[
+"<p>Use <b>must</b> + base verb to say you think something is <b>probably true</b> (conclusion).</p>",
+"<p><span class='ex-en'>A: I just broke my tooth! B: Oh no. That <b>must hurt</b>.</span></p>",
+"<p><span class='ex-en'>A: I'll see the doctor next week. B: It <b>must not be</b> an emergency.</span></p>",
+"<p>Compare: <b>must</b> = I'm almost certain / <b>might</b> = it's possible / <b>can't</b> = I'm certain it's NOT true</p>"
+],
+video:"kzfKAV6JN3E",videoNote:"Modal Verbs — MUST for Deductions and Conclusions",
+exercises:[
+{type:"fill",q:"A: You look awful! B: I know. I ____ be coming down with something.",answers:["must"]},
+{type:"mcq",q:"'The dentist isn't answering. She ____ be in today.' Choose the right form:",options:["must","must not","might","can"],correct:1},
+{type:"fill",q:"A: My doctor says I'm in perfect health. B: You ____ feel really good!",answers:["must"]},
+{type:"match",q:"Match the situation with the logical conclusion.",pairs:[["He's running a 40C fever.","He must be very sick."],["She's been at the gym for 3 hours.","She must be exhausted."],["No one is answering at the clinic.","They must not be open."],["He ate three plates of food.","He must have been starving."]]},
+{type:"tf",q:"'That must hurt' means the speaker is 100% certain it hurts.",correct:false},
+{type:"mcq",q:"'She got a promotion last week and just bought a new car.' Logical conclusion:",options:["She must be broke.","She must not be happy.","She must be doing very well."],correct:2},
+{type:"speak",phrase:"You've been coughing all week. That must be awful. You must not be sleeping well.",translation:"Has estado tosiendo toda la semana. Eso debe ser horrible. No debes estar durmiendo bien."},
+{type:"fill",q:"A: Gary has a terrible headache. B: Too bad. He ____ want to go to the concert tonight.",answers:["must not","mustn't"]}
+]},
+
+{id:"maymight",num:7,title:"May / Might / Be Able To",emoji:"🩺",cardDesc:"possibility and future ability in medical contexts",
+explain:[
+"<p><b>May / might</b> + base verb = possibility (it's possible but not certain)</p>",
+"<p><span class='ex-en'>The dentist <b>might have</b> some time this afternoon. / You <b>may need</b> to come in right away.</span></p>",
+"<p><b>Will be able to</b> = future ability: <span class='ex-en'>The doctor <b>will be able to</b> see you tomorrow.</span></p>",
+"<p>Combine: <span class='ex-en'>The doctor <b>may be able to</b> see you today. / I <b>might not be able to</b> get there until 6:00.</span></p>"
+],
+video:"cDUvD7HPrQ8",videoNote:"May, Might, Be Able To — Modal Verbs for Possibility",
+exercises:[
+{type:"fill",q:"I'd like to see a dentist right away. I think I ____ be able to give you an appointment at 2:00.",answers:["might","may","could"]},
+{type:"mcq",q:"'The doctor may be able to see you this afternoon.' This means:",options:["The doctor will definitely see you.","It's possible the doctor can see you.","The doctor cannot see you."],correct:1},
+{type:"fill",q:"She ____ not be able to make it to the appointment. She's stuck in traffic.",answers:["might","may"]},
+{type:"match",q:"Match the modal expression with its meaning.",pairs:[["will be able to","future ability (certain)"],["may be able to","possible future ability"],["might not be able to","possibly cannot"],["must be able to","concluding someone can"]]},
+{type:"fill",q:"You ____ be allergic to strawberries. You have a rash all over.",answers:["might","may","could"]},
+{type:"speak",phrase:"I might not be able to come in until Thursday. But I may be able to get there earlier if there's a cancellation.",translation:"Es posible que no pueda ir hasta el jueves. Pero quizás pueda llegar antes si hay una cancelación."},
+{type:"tf",q:"'Will be able to' and 'might be able to' both express the same level of certainty.",correct:false},
+{type:"order",q:"Order the sentence:",words:["be","The","you","able","may","today.","doctor","to","see"],correct:"The doctor may be able to see you today."}
+]},
+
+{id:"typesofmedicine",num:8,title:"Types of Medicine",emoji:"🌿",cardDesc:"conventional, homeopathy, herbal, acupuncture, spiritual",isVocab:true,
+explain:[
+"<p>There are many approaches to treating illness around the world:</p>",
+"<p><b>Conventional medicine</b> — based on scientific study. <b>Homeopathy</b> — treats symptoms with tiny diluted remedies. <b>Herbal therapy</b> — using plants as medicine. <b>Acupuncture</b> — needles at body points, originated in China 5,000 years ago. <b>Spiritual healing</b> — using faith or the mind.</p>"
+],
+video:"Zn3Lcpn4NZ4",videoNote:"Types of Medicine and Alternative Treatments — English Vocabulary",
+vocab:[
+{cat:"🏥 Medical Approaches",items:[
+{e:"🔬",w:"conventional medicine",p:"könvénshönöl médisön"},
+{e:"💧",w:"homeopathy",p:"jömiópözi"},{e:"🌿",w:"herbal therapy",p:"érbôl zérôpi"},
+{e:"📍",w:"acupuncture",p:"ákiupongkchör"},{e:"🙏",w:"spiritual healing",p:"spírichöl jíiling"},
+{e:"💊",w:"remedy",p:"rémödi"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the treatment with its description.",pairs:[["acupuncture","needles inserted at body points"],["homeopathy","very diluted remedies"],["herbal therapy","uses plants and teas"],["spiritual healing","uses faith or mind"]]},
+{type:"fill",q:"____ originated in China over 5,000 years ago and uses needles.",answers:["acupuncture","Acupuncture"]},
+{type:"mcq",q:"'80% of the world uses some form of herbal therapy.' According to whom?",options:["The Red Cross","The World Health Organization","The United Nations","Harvard University"],correct:1},
+{type:"tf",q:"Conventional medicine is based on traditional folk remedies, not science.",correct:false},
+{type:"speak",phrase:"Some people prefer herbal therapy and acupuncture. Others trust conventional medicine. Which do you prefer?",translation:"Algunas personas prefieren la fitoterapia y la acupuntura. Otras confían en la medicina convencional. ¿Cuál prefieres?"},
+{type:"mcq",q:"Homeopathy treats symptoms with:",options:["strong chemical drugs","very diluted natural remedies","surgical techniques","electrical stimulation"],correct:1},
+{type:"fill",q:"Many conventional medicines were originally discovered by studying ____ uses of herbs.",answers:["traditional"]}
+]},
+
+{id:"causatives",num:9,title:"Causatives: GET / HAVE / MAKE",emoji:"⚙️",cardDesc:"one person causes another to do something",
+explain:[
+"<p><b>Causatives</b> express the idea that one person causes another to do something.</p>",
+"<p><b>GET</b> (convinced/persuaded) + object + <b>infinitive</b>: <span class='ex-en'>I <b>got</b> the company <b>to agree</b> to a new date.</span></p>",
+"<p><b>HAVE</b> (instruction/arrangement) + object + <b>base form</b>: <span class='ex-en'>I <b>had</b> my assistant <b>plan</b> the meeting.</span></p>",
+"<p><b>MAKE</b> (obligation/force) + object + <b>base form</b>: <span class='ex-en'>They <b>made</b> him <b>sign</b> the form.</span></p>"
+],
+video:"wPlwZ0LBKBY",videoNote:"Causative Verbs — Get, Have, Make in English",
+exercises:[
+{type:"mcq",q:"'I had my assistant plan the meeting.' What does this mean?",options:["I asked my assistant and they agreed.","I instructed my assistant to plan it.","I forced my assistant to plan it."],correct:1},
+{type:"fill",q:"Why don't you ____ your assistant call them? (HAVE — instruction)",answers:["have"]},
+{type:"match",q:"Match the causative with its meaning.",pairs:[["GET + infinitive","convinced / persuaded someone"],["HAVE + base form","gave instructions to someone"],["MAKE + base form","forced / obligated someone"]]},
+{type:"fill",q:"I'll never be able to ____ my brother to do the laundry. (GET)",answers:["get"]},
+{type:"mcq",q:"'They made him sign the form.' Which causative is used?",options:["GET","HAVE","MAKE"],correct:2},
+{type:"fill",q:"Why don't you ____ your friends clean up after the party? (HAVE)",answers:["have"]},
+{type:"speak",phrase:"I got my neighbor to help me move. I also had the movers pack everything. It was easy!",translation:"Convencí a mi vecino de que me ayudara a mudarme. También hice que los cargadores empacaran todo. ¡Fue fácil!"},
+{type:"tf",q:"'I got him to help me.' — GET here means I gave him orders.",correct:false}
+]},
+
+{id:"passivecausative",num:10,title:"Passive Causatives: Have/Get Done",emoji:"🔄",cardDesc:"have your hair cut / get the car fixed",
+explain:[
+"<p>Passive causatives mean you <b>arrange for something to be done</b> (you don't do it yourself).</p>",
+"<p><b>HAVE something done</b>: <span class='ex-en'>I <b>had</b> my hair <b>cut</b>. / She's having her nails <b>done</b>.</span></p>",
+"<p><b>GET something done</b> (more informal): <span class='ex-en'>I need to <b>get</b> my car <b>repaired</b>. / Did you <b>get</b> the documents <b>copied</b>?</span></p>",
+"<p>Structure: <b>have/get + object + past participle</b></p>"
+],
+video:"BtFnkr_BGCE",videoNote:"Have Something Done / Get Something Done — Passive Causatives",
+exercises:[
+{type:"mcq",q:"'I had my car repaired.' What does this mean?",options:["I repaired the car myself.","Someone repaired my car for me.","My car needs repairs."],correct:1},
+{type:"fill",q:"She needs to get her passport ____. It expired last year.",answers:["renewed"]},
+{type:"match",q:"Match the situation with the passive causative.",pairs:[["Go to the salon","have your hair cut"],["Take the car to the mechanic","get the car fixed"],["Send clothes to the cleaner","have your clothes cleaned"],["Call a plumber","get the pipes repaired"]]},
+{type:"fill",q:"I'm going to have my apartment ____. It looks terrible.",answers:["painted"]},
+{type:"speak",phrase:"I need to get my computer fixed and have my carpets cleaned before the party.",translation:"Necesito que me arreglen la computadora y que me limpien las alfombras antes de la fiesta."},
+{type:"tf",q:"'She's getting her nails done' means she is doing her own nails.",correct:false},
+{type:"mcq",q:"'Think I could get 300 copies done by 11:00?' Which structure is used?",options:["active causative","passive causative (get + object + done)","simple passive"],correct:1},
+{type:"order",q:"Order the sentence:",words:["hair","I","my","twice","have","cut","year.","a"],correct:"I have my hair cut twice a year."}
+]},
+
+{id:"typesofbooks",num:11,title:"Types of Books",emoji:"📖",cardDesc:"novel, biography, thriller, memoir, sci-fi and more",isVocab:true,
+explain:[
+"<p>There are many types of books. <b>Fiction:</b> <span class='ex-en'>novel, mystery, thriller, romance novel, science fiction, short stories.</span></p>",
+"<p><b>Non-fiction:</b> <span class='ex-en'>biography, autobiography, memoir, travel book, self-help book.</span></p>",
+"<p>Recommending: <span class='ex-en'>I highly recommend it. / It's a great read. / You don't want to miss it.</span></p>"
+],
+video:"K2N6ck74uf8",videoNote:"Types of Books — Vocabulary in English",
+vocab:[
+{cat:"📖 Fiction",items:[
+{e:"📕",w:"novel",p:"nóvöl"},{e:"🔍",w:"mystery",p:"místöri"},
+{e:"😱",w:"thriller",p:"zrílör"},{e:"💕",w:"romance novel",p:"römáns nóvöl"},
+{e:"🚀",w:"science fiction",p:"sáiöns fíkshön"},{e:"📄",w:"short stories",p:"short stóriz"}
+]},
+{cat:"📚 Non-Fiction",items:[
+{e:"👤",w:"biography",p:"baiógröfi"},{e:"✍️",w:"autobiography",p:"otöbaiógröfi"},
+{e:"📝",w:"memoir",p:"mémwör"},{e:"✈️",w:"travel book",p:"trávöl buk"},
+{e:"💪",w:"self-help book",p:"self-jelp buk"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the book type with its description.",pairs:[["biography","a book about someone else's life"],["autobiography","a book about the author's own life"],["thriller","a suspenseful, exciting story"],["memoir","personal memories and experiences"]]},
+{type:"fill",q:"I'm reading a ____. The main character just solved a murder.",answers:["mystery"]},
+{type:"mcq",q:"'I highly recommend it. It's a cliff-hanger.' What kind of book is this probably?",options:["self-help book","travel book","thriller","biography"],correct:2},
+{type:"tf",q:"'Short stories' are always non-fiction.",correct:false},
+{type:"fill",q:"She wrote an ____ about her life growing up in rural Mexico.",answers:["autobiography"]},
+{type:"speak",phrase:"Have you read anything interesting lately? I just finished a thriller. I highly recommend it!",translation:"¿Has leído algo interesante últimamente? Acabo de terminar un thriller. ¡Te lo recomiendo mucho!"},
+{type:"mcq",q:"Which is a FICTION genre?",options:["self-help book","travel book","science fiction","biography"],correct:2}
+]},
+
+{id:"bookdescriptions",num:12,title:"Book Descriptions",emoji:"⭐",cardDesc:"page-turner, cliff-hanger, best seller, fast read",
+explain:[
+"<p><span class='ex-en'><b>A page-turner</b> = so exciting you can't stop reading. <b>A cliff-hanger</b> = ends with suspense. <b>A best seller</b> = very popular book. <b>A fast read</b> = easy and quick to read. <b>Hard to follow</b> = difficult to understand.</span></p>"
+],
+video:"R15lYVf_6rE",videoNote:"How to Describe Books in English — Vocabulary",
+exercises:[
+{type:"match",q:"Match the expression with its meaning.",pairs:[["page-turner","you can't stop reading it"],["cliff-hanger","ends with suspense"],["best seller","very popular book"],["fast read","quick and easy to read"]]},
+{type:"fill",q:"This book is a total ____-turner. I read it in one sitting!",answers:["page"]},
+{type:"mcq",q:"'I couldn't put it down!' What does this suggest about the book?",options:["It was trash","It was hard to follow","It was a page-turner","It was a fast read"],correct:2},
+{type:"fill",q:"The ending was a real cliff-____. I need to read the next book immediately!",answers:["hanger"]},
+{type:"tf",q:"A 'best seller' means a book that is very expensive.",correct:false},
+{type:"speak",phrase:"I just finished a thriller. It was a total page-turner — a real cliff-hanger at the end. It's been a best seller for months!",translation:"Acabo de terminar un thriller. Fue imposible soltarlo, con un final de suspenso total. ¡Ha sido un best seller durante meses!"},
+{type:"mcq",q:"'I couldn't get into it at all. The plot was impossible to follow.' The book was:",options:["a page-turner","hard to follow","a fast read","a cliff-hanger"],correct:1}
+]},
+
+{id:"nounclauses",num:13,title:"Noun Clauses",emoji:"🤔",cardDesc:"I believe that... / I think so / I don't think so",
+explain:[
+"<p><b>Noun clauses</b> function as the object of mental activity verbs: believe, think, know, hear, say, feel, guess, hope.</p>",
+"<p>Introduced by <b>that</b> (optional): <span class='ex-en'>I believe <b>that</b> he wrote the book. / She thought <b>that</b> it was fantastic.</span></p>",
+"<p>Short answers using <b>so</b>: <span class='ex-en'>A: Is the library open? B: I think <b>so</b>. / I don't think <b>so</b>. / I hope <b>so</b>. / I hope <b>not</b>.</span></p>"
+],
+video:"E8-GQEQiGEo",videoNote:"Noun Clauses in English — That Clauses and Short Answers",
+exercises:[
+{type:"fill",q:"I believe ____ he wrote that book in just three months.",answers:["that","(that)"]},
+{type:"mcq",q:"A: Is the library open today? B: ____ — it closes on Sundays.",options:["I think so","I don't think so","I hope so","I know so"],correct:1},
+{type:"fill",q:"A: Will there be a sequel? B: I hope ____!",answers:["so"]},
+{type:"match",q:"Match the sentence with its short form.",pairs:[["I believe that she is right.","I believe so."],["I don't think that he'll come.","I don't think so."],["I hope that the book is good.","I hope so."],["I guess that it's true.","I guess so."]]},
+{type:"fill",q:"She thought ____ Junot Diaz's novels were fantastic.",answers:["that"]},
+{type:"speak",phrase:"I believe that reading fiction makes you more empathetic. Do you think so?",translation:"Creo que leer ficción te hace más empático. ¿Tú crees?"},
+{type:"tf",q:"'I think so' can replace 'I think that she's right' when the context is clear.",correct:true},
+{type:"mcq",q:"'Louis didn't know ____ he wrote that book.' The 'that' is:",options:["required and cannot be removed","optional — can be omitted in direct objects","always wrong to omit"],correct:1}
+]},
+
+{id:"embeddedquestions",num:14,title:"Embedded Questions",emoji:"🔍",cardDesc:"I wonder if... / Can you tell me where... / Tell me whether...",
+explain:[
+"<p><b>Embedded questions</b> are questions inside a statement or another question. They use <b>normal word order</b> (not inverted).</p>",
+"<p>Yes/No questions → use <b>if</b> or <b>whether</b>: <span class='ex-en'>Tell me <b>if</b> it's good. / Could you tell me <b>whether</b> he liked it?</span></p>",
+"<p>Information questions → use the question word: <span class='ex-en'>Do you know <b>where she bought it</b>?</span></p>",
+"<p>Note: No auxiliary (do/does/did) in embedded questions! <span class='ex-en'>❌ I wonder where <b>does</b> she live. ✅ I wonder where <b>she lives</b>.</span></p>"
+],
+video:"ioyBFxhB7_4",videoNote:"Embedded Questions in English — Indirect Questions",
+exercises:[
+{type:"fill",q:"Do you know ____ the writer is from?",answers:["where"]},
+{type:"mcq",q:"'Does she like to read?' → Embedded form:",options:["I wonder does she like to read.","I wonder if she likes to read.","I wonder if does she like to read."],correct:1},
+{type:"fill",q:"Can you tell me ____ you bought that magazine?",answers:["where"]},
+{type:"match",q:"Transform to embedded questions.",pairs:[["Is that magazine any good?","Tell me if the magazine is any good."],["Who's the writer?","I wonder who the writer is."],["When was it written?","Can you tell me when it was written?"],["Did he like the article?","I'd like to know whether he liked it."]]},
+{type:"fill",q:"I wonder ____ I could borrow your magazine.",answers:["if","whether"]},
+{type:"speak",phrase:"I wonder if you could tell me where you got that book. I've been looking everywhere for it.",translation:"Me pregunto si podrías decirme dónde conseguiste ese libro. Lo he estado buscando por todos lados."},
+{type:"tf",q:"'I wonder where does she live' is correct English.",correct:false},
+{type:"order",q:"Form the embedded question:",words:["know","finished","you","the","Do","whether","magazine.","you've"],correct:"Do you know whether you've finished the magazine."}
+]},
+
+{id:"naturaldisasters",num:15,title:"Natural Disasters",emoji:"🌊",cardDesc:"flood, earthquake, hurricane, tornado, tsunami",isVocab:true,
+explain:[
+"<p>Vocabulary for describing <b>natural disasters</b>: <span class='ex-en'>death toll · casualties · property damage · breaking news · horrendous · enormous</span></p>",
+"<p>Useful expressions: <span class='ex-en'>What a disaster! / Any word on casualties? / The death toll could end up being huge.</span></p>"
+],
+video:"P9G8MV_KZIM",videoNote:"Natural Disasters Vocabulary in English",
+vocab:[
+{cat:"🌊 Natural Events",items:[
+{e:"🌊",w:"flood",p:"flod"},{e:"🌀",w:"hurricane",p:"jórikein"},
+{e:"🌪️",w:"tornado",p:"tornéido"},{e:"🌋",w:"volcanic eruption",p:"völkánik irópshen"},
+{e:"🏔️",w:"avalanche",p:"ávölonch"},{e:"🏜️",w:"drought",p:"draut"},
+{e:"🌊",w:"tsunami",p:"tsunámi"},{e:"🔥",w:"wildfire",p:"wáildfair"}
+]},
+{cat:"📰 News Language",items:[
+{e:"💀",w:"death toll",p:"dez toul"},{e:"🤕",w:"casualties",p:"kázhööltiiz"},
+{e:"🏚️",w:"property damage",p:"própörti dámich"},{e:"📺",w:"breaking news",p:"bréiking niuuz"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the disaster with its description.",pairs:[["flood","water covers streets and buildings"],["tornado","violent rotating column of air"],["drought","long period without rain"],["tsunami","giant ocean wave caused by earthquake"]]},
+{type:"fill",q:"A: Any word on ____? B: It says no deaths reported so far.",answers:["casualties"]},
+{type:"mcq",q:"'The death toll could end up being huge.' What is the 'death toll'?",options:["the amount of property damage","the number of people killed","the cost of reconstruction","the number of rescued people"],correct:1},
+{type:"fill",q:"Look at these people on the roof! What a ____!",answers:["disaster","nightmare"]},
+{type:"tf",q:"'Breaking news' refers to a report about something that happened years ago.",correct:false},
+{type:"speak",phrase:"There's a huge flood in the south. The death toll is rising and property damage is enormous.",translation:"Hay una gran inundación en el sur. El número de muertos sigue aumentando y los daños a la propiedad son enormes."},
+{type:"mcq",q:"Which disaster is caused by a tectonic shift under the ocean?",options:["drought","wildfire","tsunami","tornado"],correct:2}
+]},
+
+{id:"indirectimperatives",num:16,title:"Indirect Speech: Imperatives",emoji:"📢",cardDesc:"He said to be careful / She told them to call",
+explain:[
+"<p><b>Indirect speech</b> reports what someone said without quoting exact words.</p>",
+"<p>An <b>imperative</b> in direct speech becomes an <b>infinitive</b> in indirect speech.</p>",
+"<p><b>SAY:</b> no listener mentioned → <span class='ex-en'>She said to get supplies.</span></p>",
+"<p><b>TELL:</b> listener mentioned → <span class='ex-en'>She <b>told Dan</b> to call her the next day.</span></p>",
+"<p>Note: Change pronouns and time words: <span class='ex-en'>'Call me tomorrow.' → She told him to call her the next day.</span></p>"
+],
+video:"YEnYIWXEnr8",videoNote:"Reported Speech — Imperatives in English",
+exercises:[
+{type:"fill",q:"Martha told me: 'Be home before the snowstorm.' → Martha told me ____ home before the snowstorm.",answers:["to be"]},
+{type:"mcq",q:"'Get ready for a big storm!' → Everyone is saying...",options:["everyone is saying get ready.","everyone is saying to get ready.","everyone said getting ready."],correct:1},
+{type:"fill",q:"They told her, 'Don't be home too late.' → They told her ____ be home too late.",answers:["not to"]},
+{type:"match",q:"Match direct to indirect speech.",pairs:[["'Read the weather report.'","She said to read the weather report."],["'Call me tomorrow.'","She told him to call her the next day."],["'Don't leave yet.'","He told them not to leave yet."],["'Turn on the TV.'","They said to turn on the TV."]]},
+{type:"tf",q:"'She said to be careful' — here 'said' has a listener mentioned after it.",correct:false},
+{type:"order",q:"Convert to indirect speech:",words:["to","said","on","the","TV.","turn","She"],correct:"She said to turn on the TV."},
+{type:"speak",phrase:"They said to get supplies of food and water. They told us not to go outside.",translation:"Dijeron que consiguiéramos provisiones. Nos dijeron que no saliéramos."},
+{type:"fill",q:"He told them ____ him when it started raining.",answers:["to call"]}
+]},
+
+{id:"indirectsaytell",num:17,title:"Indirect Speech: Say & Tell + Tense Changes",emoji:"🗣️",cardDesc:"present→past, past→past perfect when reporting speech",
+explain:[
+"<p>When <b>say/tell</b> are past tense, verb tenses change in indirect speech:</p>",
+"<p><b>Present → Past:</b> <span class='ex-en'>'The weather is awful.' → They said the weather <b>was</b> awful.</span></p>",
+"<p><b>Past → Past Perfect:</b> <span class='ex-en'>'We all had the flu.' → Dan said they all <b>had had</b> the flu.</span></p>",
+"<p><b>Use tell when you mention the listener, say when you don't.</b></p>"
+],
+video:"7nPlA5MnFVM",videoNote:"Reported Speech — Say and Tell, Tense Changes",
+exercises:[
+{type:"fill",q:"They said: 'The weather is awful.' → They said that the weather ____ awful.",answers:["was"]},
+{type:"mcq",q:"'We had the flu.' → Dan said...",options:["Dan said they had the flu.","Dan said they had had the flu.","Dan said they have had the flu."],correct:1},
+{type:"match",q:"Match direct speech to indirect speech tense change.",pairs:[["'It is raining.'","She said it was raining."],["'She has left.'","He said she had left."],["'We went.'","They said they had gone."],["'I am tired.'","She said she was tired."]]},
+{type:"fill",q:"Maggie ____ her parents to stay home. (tell — listener mentioned)",answers:["told"]},
+{type:"fill",q:"Maggie ____ to stay home. (say — no listener mentioned)",answers:["said"]},
+{type:"speak",phrase:"The radio said to get ready for a big storm. It said that the roads would be closed tomorrow.",translation:"La radio dijo que nos preparáramos para una gran tormenta. Dijo que las carreteras estarían cerradas mañana."},
+{type:"tf",q:"'She said to stay home' and 'She told to stay home' are both correct.",correct:false},
+{type:"order",q:"Convert to indirect speech:",words:["said","hadn't","She","months.","it","rained","in"],correct:"She said it hadn't rained in months."}
+]},
+
+{id:"futureinthepast1",num:18,title:"Future in the Past: Was/Were Going To",emoji:"🕐",cardDesc:"I was going to study law — plans that changed",
+explain:[
+"<p><b>Was/were going to</b> is the past form of <b>be going to</b>. It expresses plans someone had in the past — often plans that changed.</p>",
+"<p><span class='ex-en'>I <b>was going to</b> get married (but I didn't). / They <b>were going to</b> study art (but they changed their minds).</span></p>",
+"<p>Questions: <span class='ex-en'><b>Weren't you going to</b> study law? (Yes, I was / No, I wasn't.)</span></p>"
+],
+video:"QCZV9QJxJo4",videoNote:"Future in the Past — Was/Were Going To in English",
+exercises:[
+{type:"fill",q:"I ____ ____ be a rock star, but I changed my mind.",answers:["was going to"]},
+{type:"mcq",q:"'She was going to marry Andrei but she didn't.' This means:",options:["She married Andrei.","She planned to marry Andrei but the plan changed.","She is going to marry Andrei."],correct:1},
+{type:"fill",q:"They said they ____ ____ arrive before noon, but they were late.",answers:["were going to"]},
+{type:"match",q:"Match the changed plan with its result.",pairs:[["I was going to be a lawyer...","but I became a teacher instead."],["She was going to live in Paris...","but she moved to Madrid."],["We were going to get married...","but we broke up last year."],["He was going to study medicine...","but he switched to engineering."]]},
+{type:"tf",q:"'Was going to' is used for future plans that the speaker still intends to carry out.",correct:false},
+{type:"speak",phrase:"I was going to study medicine, but I changed my mind. I was also going to live abroad, but I stayed here.",translation:"Iba a estudiar medicina, pero cambié de opinión. También iba a vivir en el extranjero, pero me quedé aquí."},
+{type:"order",q:"Order the question:",words:["you","going","law?","study","weren't","to"],correct:"Weren't you going to study law?"},
+{type:"fill",q:"____ you going to call me? I waited all day!",answers:["weren't","Weren't"]}
+]},
+
+{id:"perfectmodals",num:19,title:"Perfect Modals",emoji:"🎖️",cardDesc:"should have / may have / must have / would have / could have",
+explain:[
+"<p><b>Perfect modals</b> express thoughts about past actions or situations.</p>",
+"<p><b>should have + p.p.</b> → regret: <span class='ex-en'>I <b>should have</b> studied medicine.</span></p>",
+"<p><b>may/might have + p.p.</b> → possibility: <span class='ex-en'>I <b>may have</b> failed the exam.</span></p>",
+"<p><b>would/could have + p.p.</b> → certainty/ability (unreal): <span class='ex-en'>They <b>would have</b> been happy together.</span></p>",
+"<p><b>must have + p.p.</b> → conclusion: <span class='ex-en'>Beth isn't here. She <b>must have</b> gone home early.</span></p>"
+],
+video:"VkTNorRjYrg",videoNote:"Perfect Modal Verbs — Should Have, Must Have, Could Have",
+exercises:[
+{type:"mcq",q:"'I should have studied medicine.' This expresses:",options:["a future plan","a regret about the past","a conclusion about the past","a possibility"],correct:1},
+{type:"fill",q:"Beth isn't here. She ____ ____ gone home early. (conclusion)",answers:["must have"]},
+{type:"fill",q:"It's too bad he broke up with Anne. They ____ ____ been happy together.",answers:["would have"]},
+{type:"match",q:"Match the perfect modal to its meaning.",pairs:[["should have","regret / judgment"],["must have","conclusion about past"],["might have","past possibility"],["could have","past ability (unreal)"]]},
+{type:"fill",q:"I don't know why she married him. He ____ ____ been the wrong person for her.",answers:["must have","might have","may have"]},
+{type:"speak",phrase:"I should have studied harder. I might have passed the exam if I had. I could have been a doctor!",translation:"Debería haber estudiado más. Quizás habría pasado el examen si lo hubiera hecho. ¡Podría haber sido médico!"},
+{type:"tf",q:"'He might have passed the exam' means he definitely passed.",correct:false},
+{type:"order",q:"Order the sentence:",words:["have","the","He","accident.","could","prevented"],correct:"He could have prevented the accident."}
+]},
+
+{id:"mindexpressions",num:20,title:"Mind Expressions & Life Plans",emoji:"🧠",cardDesc:"make up one's mind, keep in mind, change one's mind",
+explain:[
+"<p><span class='ex-en'><b>Make up one's mind</b> = make a final decision. <b>Change one's mind</b> = decide something different. <b>Keep something in mind</b> = remember it. <b>Be on one's mind</b> = be thinking about it. <b>Pick someone's brain</b> = ask for their advice.</span></p>"
+],
+video:"TZeIPvTqtew",videoNote:"Idioms with MIND in English — Natural Expressions",
+exercises:[
+{type:"match",q:"Match the expression with its meaning.",pairs:[["make up one's mind","make a final decision"],["change one's mind","decide differently"],["keep in mind","remember something"],["pick someone's brain","ask for their advice"]]},
+{type:"fill",q:"She hasn't ____ ____ her mind yet. She's still deciding between law and medicine.",answers:["made up"]},
+{type:"mcq",q:"'Something has been on my mind all day.' This means:",options:["I have forgotten something.","I've been thinking about something all day.","I changed my decision.","I made a final decision."],correct:1},
+{type:"fill",q:"Can I ____ your brain about career options? You know so much about this.",answers:["pick"]},
+{type:"speak",phrase:"I've finally made up my mind — I'm going to study business. Can I pick your brain about the best universities?",translation:"Por fin me he decidido: voy a estudiar negocios. ¿Puedo pedirte tu opinión sobre las mejores universidades?"},
+{type:"tf",q:"'Keep this in mind' means forget about it immediately.",correct:false},
+{type:"fill",q:"He was going to be a lawyer, but he ____ his mind and became an artist.",answers:["changed"]},
+{type:"mcq",q:"'She settled on medicine.' What does 'settle on' mean?",options:["She rejected medicine.","She finally chose medicine after considering other options.","She is still thinking about medicine."],correct:1}
+]},
+
+{id:"holidayvocab",num:21,title:"Holidays & Traditions Vocabulary",emoji:"🎊",cardDesc:"ways to commemorate, types of holidays worldwide",isVocab:true,
+explain:[
+"<p><b>Types of holidays:</b> <span class='ex-en'>Seasonal · Historical · Religious</span></p>",
+"<p><b>Ways to celebrate:</b> <span class='ex-en'>gather with family · exchange gifts · attend a ceremony · wear traditional clothing · prepare a special dish · watch fireworks · participate in a parade</span></p>",
+"<p>Examples: <span class='ex-en'>Chuseok (Korea), Eid al-Adha (Islamic), Carnaval (Brazil), Hanami (Japan), Thanksgiving (USA)</span></p>"
+],
+video:"7kYqcxm-XMg",videoNote:"Holidays and Traditions Around the World — English Vocabulary",
+vocab:[
+{cat:"📅 Types of Holidays",items:[
+{e:"🌸",w:"seasonal",p:"sízonôl"},{e:"📜",w:"historical",p:"jistórikôl"},
+{e:"🙏",w:"religious",p:"rilíyôs"},{e:"🎉",w:"national",p:"náshônôl"}
+]},
+{cat:"🎉 Ways to Celebrate",items:[
+{e:"👨‍👩‍👧",w:"gather with family",p:"gázör"},{e:"🎁",w:"exchange gifts",p:"ikschéiny gifts"},
+{e:"👘",w:"wear traditional clothing",p:"wér"},{e:"🍽️",w:"prepare a special dish",p:"prépér"},
+{e:"🎆",w:"watch fireworks",p:"woch fáiörwörks"},{e:"🥁",w:"participate in a parade",p:"paréid"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the holiday with its country/culture.",pairs:[["Chuseok","Korea"],["Carnaval","Brazil"],["Hanami","Japan"],["Thanksgiving","USA"]]},
+{type:"fill",q:"Eid al-Adha is a ____ holiday celebrated by Muslims worldwide.",answers:["religious"]},
+{type:"mcq",q:"'The train stations were mobbed with people.' This probably describes:",options:["a quiet local festival","a major national holiday when everyone travels home","a religious ceremony","a parade"],correct:1},
+{type:"fill",q:"During Chuseok, Koreans ____ with their families and pay respects to ancestors.",answers:["gather"]},
+{type:"speak",phrase:"In my country, we celebrate a holiday in November where families gather and prepare a special dish together.",translation:"En mi país celebramos una festividad en noviembre en la que las familias se reúnen y preparan juntas un platillo especial."},
+{type:"tf",q:"'Seasonal' holidays are always religious celebrations.",correct:false},
+{type:"mcq",q:"Which activity is typical at Carnaval in Brazil?",options:["exchange gifts","participate in a parade","gather with family quietly","go to church"],correct:1}
+]},
+
+{id:"adjectiveclauses1",num:22,title:"Adjective Clauses: Subject (who, that)",emoji:"👤",cardDesc:"A person who/that sings... / A celebration that takes place...",
+explain:[
+"<p><b>Adjective clauses</b> identify or describe people or things. They come right after the noun they describe.</p>",
+"<p>For <b>people</b>: use <b>who</b> or <b>that</b>: <span class='ex-en'>A mariachi singer is someone <b>who/that</b> sings traditional Mexican music.</span></p>",
+"<p>For <b>things</b>: use <b>that</b>: <span class='ex-en'>Thanksgiving is a celebration <b>that</b> takes place in November.</span></p>",
+"<p>Don't use a subject pronoun after who/that: <span class='ex-en'>❌ A celebration <b>that it</b> takes place. ✅ A celebration <b>that</b> takes place.</span></p>"
+],
+video:"Cs5S8pQN9Mc",videoNote:"Adjective Clauses — Who and That as Subject Pronouns",
+exercises:[
+{type:"fill",q:"A mariachi singer is someone ____ sings traditional Mexican music.",answers:["who","that"]},
+{type:"mcq",q:"Which sentence is correct?",options:["Carnaval is a holiday who takes place in February.","Carnaval is a holiday that takes place in February.","Carnaval is a holiday which it takes place in February."],correct:1},
+{type:"fill",q:"People ____ celebrate April Fool's Day have a lot of fun every April 1st.",answers:["who","that"]},
+{type:"match",q:"Complete each adjective clause.",pairs:[["Ramadan is a tradition","that falls on a different day every year."],["The woman who designed our costumes","was really talented."],["Anyone who doesn't wear a costume","can't go to the festival."],["The Dragon Boat Festival","is a celebration that takes place in May."]]},
+{type:"tf",q:"'Thanksgiving is a celebration that it takes place in November' is correct.",correct:false},
+{type:"speak",phrase:"Hanami is a tradition that takes place every spring in Japan. It's celebrated by people who gather under cherry blossom trees.",translation:"El Hanami es una tradición que tiene lugar cada primavera en Japón. La celebran personas que se reúnen bajo los cerezos en flor."},
+{type:"order",q:"Order the sentence:",words:["someone","mariachi","who","A","singer","traditional","music.","sings","is"],correct:"A mariachi singer is someone who sings traditional music."},
+{type:"mcq",q:"'The parade ___ commemorates Bastille Day is very exciting.' Choose the right word:",options:["who","which it","that","what"],correct:2}
+]},
+
+{id:"adjectiveclauses2",num:23,title:"Adjective Clauses: Object (who, whom, that)",emoji:"🔗",cardDesc:"The person (who) you invite... — object relative pronouns",
+explain:[
+"<p>When the relative pronoun is the <b>object</b> of the clause, it can be <b>omitted</b>.</p>",
+"<p><span class='ex-en'>The person <b>who/whom/that</b> you invite for dinner should bring a gift. = The person <b>you invite</b> for dinner should bring a gift.</span></p>",
+"<p>When it's the <b>subject</b>, it CANNOT be omitted: <span class='ex-en'>❌ The person comes for dinner should bring a gift.</span></p>",
+"<p>Do NOT use an object pronoun after the verb: <span class='ex-en'>❌ The person who you invite <b>them</b> for dinner.</span></p>"
+],
+video:"l2XzHhC-k-g",videoNote:"Adjective Clauses — Object Relative Pronouns in English",
+exercises:[
+{type:"mcq",q:"'The person who you invite for dinner should bring a gift.' The relative pronoun 'who' here is:",options:["the subject of the clause","the object of the clause","not needed at all"],correct:1},
+{type:"fill",q:"The tomatoes ____ people throw at each other during La Tomatina are very messy.",answers:["that"]},
+{type:"mcq",q:"Which sentence correctly omits the relative pronoun?",options:["The person who she is lives in Paris.","The book I borrowed was amazing.","The holiday that it celebrates spring is Hanami."],correct:1},
+{type:"match",q:"Find and correct the error.",pairs:[["People visit other countries should know the customs.","People WHO visit other countries..."],["The tradition who people observe on Canada's Atlantic coast...","...that people observe..."],["The man you were talking with him plays in a band.","...talking with plays in a band."],["The song that she sang it was beautiful.","...that she sang was beautiful."]]},
+{type:"fill",q:"The man ____ you were talking with plays in a mariachi band.",answers:["who","whom","that",""]},
+{type:"speak",phrase:"The costumes the young people wore at the parade were incredible. The man I talked to designed them himself.",translation:"Los disfraces que usaban los jóvenes en el desfile eran increíbles. El hombre con quien hablé los diseñó él mismo."},
+{type:"tf",q:"When the relative pronoun is the object, it is OPTIONAL and can be removed.",correct:true},
+{type:"order",q:"Order without the relative pronoun:",words:["borrow","the","book","you","was","amazing.","The","want","to"],correct:"The book you want to borrow was amazing."}
+]},
+
+{id:"techvocab",num:24,title:"Technology & Inventions Vocabulary",emoji:"💡",cardDesc:"state-of-the-art, cutting-edge, top-of-the-line, revolutionary",isVocab:true,
+explain:[
+"<p><span class='ex-en'><b>state-of-the-art</b> = uses the latest technology. <b>cutting-edge</b> = innovative and advanced. <b>top-of-the-line</b> = highest quality. <b>revolutionary</b> = completely changes how something works. <b>innovative</b> = uses new methods. <b>first-rate</b> = excellent quality.</span></p>"
+],
+video:"HhQVidZxDTc",videoNote:"Technology Vocabulary — Describing Inventions and Products",
+vocab:[
+{cat:"✨ Positive Adjectives",items:[
+{e:"🔬",w:"state-of-the-art",p:"steit öv zi art"},{e:"⚡",w:"cutting-edge",p:"kóting ech"},
+{e:"🏆",w:"top-of-the-line",p:"top öv zö lain"},{e:"🚀",w:"revolutionary",p:"revöliúshöneri"},
+{e:"💡",w:"innovative",p:"ínoveitiv"},{e:"⭐",w:"first-rate",p:"först reit"}
+]},
+{cat:"👎 Negative Adjectives",items:[
+{e:"📼",w:"old-fashioned",p:"ould fáshönd"},{e:"⏳",w:"inefficient",p:"ineifíshönt"},
+{e:"🃏",w:"gimmicky",p:"gímiki"},{e:"🔋",w:"unreliable",p:"önrilíöböl"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the adjective with its meaning.",pairs:[["state-of-the-art","uses the latest technology"],["cutting-edge","innovative and advanced"],["top-of-the-line","highest quality"],["revolutionary","completely changes how something works"]]},
+{type:"fill",q:"The Strawberry smartphone is ____ of the ____. It's the best on the market.",answers:["state-of-the-art","top-of-the-line"]},
+{type:"mcq",q:"'If you want a fuel-efficient car, this model is a first-rate choice.' 'First-rate' means:",options:["very old and unreliable","excellent quality","the cheapest option","very complicated"],correct:1},
+{type:"fill",q:"The printing press was ____ — it changed communication forever.",answers:["revolutionary"]},
+{type:"speak",phrase:"This cutting-edge camera is state-of-the-art. It's a bit expensive, but it's top-of-the-line quality.",translation:"Esta cámara de vanguardia es de última generación. Es un poco cara, pero es de la más alta calidad."},
+{type:"tf",q:"'Old-fashioned' is a positive adjective for describing technology.",correct:false},
+{type:"mcq",q:"Which adjective best describes a product that wastes time, money or energy?",options:["first-rate","cutting-edge","inefficient","innovative"],correct:2}
+]},
+
+{id:"conditionals",num:25,title:"Real & Unreal Conditionals",emoji:"⚖️",cardDesc:"If you want... / If I were you... — present real vs unreal",
+explain:[
+"<p><b>REAL conditionals</b> describe facts or likely situations: <span class='ex-en'>If you want a fuel-efficient car, you need something smaller.</span></p>",
+"<p>Never use future in the if-clause: <span class='ex-en'>❌ If you <b>will buy</b>... ✅ If you <b>buy</b>...</span></p>",
+"<p><b>UNREAL conditionals</b> describe imaginary situations: <span class='ex-en'>If I <b>were</b> you, I <b>wouldn't</b> buy the Digicom.</span></p>",
+"<p>Never use 'would' in the if-clause: <span class='ex-en'>❌ If Blueberry <b>would have</b>...</span></p>"
+],
+video:"Mez7Y3wkrqE",videoNote:"Conditional Sentences — Real and Unreal Conditionals",
+exercises:[
+{type:"mcq",q:"'If you buy the Alva, you'll get great fuel efficiency.' This is a:",options:["unreal conditional","real conditional","past unreal conditional"],correct:1},
+{type:"fill",q:"If I ____ you, I wouldn't buy that phone. The battery is terrible.",answers:["were"]},
+{type:"mcq",q:"'If Blueberry ____ a cutting-edge smartphone, it would outsell Strawberry.'",options:["will have","would have","had","has"],correct:2},
+{type:"fill",q:"What ____ you do if your laptop breaks?",answers:["would"]},
+{type:"match",q:"Identify: Real or Unreal conditional?",pairs:[["If you turn off your phone, you save battery.","Real"],["If I were rich, I would travel the world.","Unreal"],["If she had an internet connection, she would send the report.","Unreal"],["If they see something first-rate, they buy it.","Real"]]},
+{type:"speak",phrase:"If I were you, I wouldn't buy that old-fashioned model. If you buy the new one, you'll be much happier.",translation:"Si yo fuera tú, no compraría ese modelo anticuado. Si compras el nuevo, estarás mucho más contento."},
+{type:"tf",q:"'If you will buy the Alva...' is correct English in a real conditional.",correct:false},
+{type:"order",q:"Form the unreal conditional:",words:["would","I","you,","you","buy","the","were","If","Alva.","I"],correct:"If I were you, I would buy the Alva."}
+]},
+
+{id:"pastunreal",num:26,title:"Past Unreal Conditionals",emoji:"⏪",cardDesc:"If she had rented... she wouldn't have spent...",
+explain:[
+"<p>The <b>past unreal conditional</b> describes situations that didn't happen and their imaginary results.</p>",
+"<p>Structure: <b>If + had + p.p.</b> → <b>would/could have + p.p.</b></p>",
+"<p><span class='ex-en'>If she <b>had rented</b> a more economical car, she <b>wouldn't have spent</b> so much on gas.</span></p>",
+"<p><span class='ex-en'>If Jonas Salk <b>hadn't invented</b> the vaccine, many more people <b>would have gotten</b> polio.</span></p>"
+],
+video:"GCEeqXXqULo",videoNote:"Past Unreal Conditionals — If I Had Known...",
+exercises:[
+{type:"fill",q:"If she had rented a more economical car, she ____ ____ spent so much on gas.",answers:["wouldn't have","would not have"]},
+{type:"mcq",q:"'I wouldn't have gone to class if I had known I had the flu.' This means:",options:["I went to class because I didn't know I had the flu.","I didn't go to class.","I knew I had the flu and still went to class."],correct:0},
+{type:"fill",q:"If we ____ used our GPS, we wouldn't have gotten lost.",answers:["had"]},
+{type:"match",q:"Match the past unreal condition with its implied meaning.",pairs:[["If she had seen the sale, she would have bought more.","She didn't see the sale."],["If he hadn't driven carefully, he would have had an accident.","He drove carefully."],["If I had studied more, I would have passed.","I didn't study enough."],["If they hadn't planted new tomatoes, they would have lost the crop.","They did plant new tomatoes."]]},
+{type:"fill",q:"What ____ you ____ if you hadn't had a phone in your car?",answers:["would ... have done"]},
+{type:"speak",phrase:"If I had seen the article, I wouldn't have bought that car. I could have saved a lot of money!",translation:"Si hubiera visto el artículo, no habría comprado ese carro. ¡Podría haber ahorrado mucho dinero!"},
+{type:"tf",q:"'If she had rented a car, she would spend less.' This is a correct past unreal conditional.",correct:false},
+{type:"order",q:"Order the sentence:",words:["have","would","Jonas","invented","Salk","hadn't","the","if","vaccine,","people","gotten","more","polio."],correct:"If Jonas Salk hadn't invented the vaccine, more people would have gotten polio."}
+]},
+
+{id:"politicalterms",num:27,title:"Political Terminology",emoji:"🗳️",cardDesc:"democracy, monarchy, constitution, election, dictatorship",isVocab:true,
+explain:[
+"<p><span class='ex-en'><b>government</b> = the group who govern a country. <b>constitution</b> = basic laws of a country. <b>democracy</b> = citizens vote to choose their government. <b>monarchy</b> = ruled by a king or queen. <b>dictatorship</b> = one ruler with complete power. <b>constitutional monarchy</b> = king/queen limited by a constitution.</span></p>"
+],
+video:"fVGnGdxCHqQ",videoNote:"Political Vocabulary in English — Government Systems",
+vocab:[
+{cat:"🏛️ Government Systems",items:[
+{e:"🗳️",w:"democracy",p:"demókrösi"},{e:"👑",w:"monarchy",p:"mónörki"},
+{e:"📜",w:"constitution",p:"konstitúshön"},{e:"⚡",w:"dictatorship",p:"diktéitörship"},
+{e:"⚖️",w:"constitutional monarchy",p:"konstitiúshönöl"},{e:"🏛️",w:"government",p:"gövörnmönt"}
+]},
+{cat:"🗳️ Political Actions",items:[
+{e:"📋",w:"election",p:"ilékshen"},{e:"✅",w:"vote",p:"vout"},
+{e:"📣",w:"campaign",p:"kampéin"},{e:"⚖️",w:"politics",p:"pólitiks"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the government system with its definition.",pairs:[["democracy","citizens vote to choose leaders"],["monarchy","ruled by a king or queen"],["dictatorship","one ruler has complete power"],["constitutional monarchy","king/queen limited by law"]]},
+{type:"fill",q:"The United Kingdom is a ____. The monarch's power is limited by law.",answers:["constitutional monarchy"]},
+{type:"mcq",q:"'An election' is best defined as:",options:["a set of basic laws","an occasion when people vote","the group that governs a country","a single ruler with total power"],correct:1},
+{type:"fill",q:"In a ____, every citizen has the right to vote for their leaders.",answers:["democracy"]},
+{type:"speak",phrase:"Would it be rude to discuss politics at dinner? I tend to be a little opinionated about democracy and elections.",translation:"¿Sería de mala educación hablar de política en la cena? Tiendo a ser un poco dogmático sobre la democracia y las elecciones."},
+{type:"tf",q:"A 'dictatorship' is a system where all citizens vote freely.",correct:false},
+{type:"mcq",q:"To 'campaign' means to:",options:["vote in an election","run a series of actions to win an election","govern a country","write a constitution"],correct:1}
+]},
+
+{id:"politicalspectrum",num:28,title:"The Political Spectrum",emoji:"📊",cardDesc:"radical, liberal, moderate, conservative, reactionary",
+explain:[
+"<p>From left to right: <span class='ex-en'><b>Radical</b> = supports complete change. <b>Liberal</b> = supports change; respects different beliefs. <b>Moderate</b> = balanced views; not extreme. <b>Conservative</b> = prefers keeping things as they are. <b>Reactionary</b> = strongly opposed to change.</span></p>"
+],
+video:"aBynt7zZjxk",videoNote:"The Political Spectrum — Liberal, Conservative, Moderate",
+exercises:[
+{type:"match",q:"Match the political term with its description.",pairs:[["radical","supports complete change"],["liberal","supports change, respects diversity"],["moderate","balanced, not extreme"],["conservative","prefers keeping things as they are"]]},
+{type:"mcq",q:"'Strongly opposed to political or social change' describes a:",options:["liberal","moderate","reactionary","radical"],correct:2},
+{type:"fill",q:"Most people consider ____ politicians reasonable because their views are balanced.",answers:["moderate"]},
+{type:"fill",q:"She wants to completely change the economic system. She's quite ____.",answers:["radical"]},
+{type:"speak",phrase:"I do tend to be a little opinionated. I consider myself liberal — I support change and respect different beliefs.",translation:"Tiendo a ser un poco dogmático. Me considero liberal: apoyo el cambio y respeto las distintas creencias."},
+{type:"tf",q:"A 'conservative' politician wants to completely change the existing system.",correct:false},
+{type:"mcq",q:"Which is NOT typically a liberal value?",options:["Respecting diversity","Supporting change","Strongly opposing all reform","Open-mindedness"],correct:2}
+]},
+
+{id:"abstractnouns",num:29,title:"Non-Count Abstract Nouns",emoji:"🚫",cardDesc:"advice, education, health, justice, news — no articles needed",
+explain:[
+"<p>Abstract nouns are always non-count (no plural, usually no article).</p>",
+"<p><span class='ex-en'>✅ Education is important. ❌ The education is important. ❌ Educations are important.</span></p>",
+"<p>Key abstract nouns: <span class='ex-en'>advice · crime · education · health · help · information · investment · justice · news · patience · peace · politics · poverty · progress · proof · success · time · work</span></p>",
+"<p>Special: <b>news</b> is always singular: <span class='ex-en'>The news <b>is</b> interesting.</span></p>"
+],
+video:"GsTKj8sQkSc",videoNote:"Non-Count Nouns — Abstract Ideas in English Grammar",
+exercises:[
+{type:"mcq",q:"'Our ___ to you is to avoid discussing politics.' Correct form:",options:["advices","advice","an advice"],correct:1},
+{type:"fill",q:"Good ____ is hard to find in the newspaper these days.",answers:["news"]},
+{type:"fill",q:"____ has affected the quality of schools in many regions.",answers:["Poverty"]},
+{type:"match",q:"Correct the error in each sentence.",pairs:[["The education is important for everyone.","Education is important for everyone."],["She gave me a good advice.","She gave me good advice."],["The news are shocking today.","The news is shocking today."],["They made many progresses.","They made much progress."]]},
+{type:"tf",q:"'Making peace takes a lot of works and patience.' This sentence is correct.",correct:false},
+{type:"fill",q:"Both candidates have programs for ____ and ____.",answers:["health and education"]},
+{type:"speak",phrase:"Education and justice are the foundations of progress. Without them, poverty is hard to overcome.",translation:"La educación y la justicia son los cimientos del progreso. Sin ellos, la pobreza es difícil de superar."},
+{type:"mcq",q:"Which sentence uses abstract nouns correctly?",options:["She has many knowledges.","The informations are useful.","Progress takes time and patience.","I need an advice."],correct:2}
+]},
+
+{id:"verbsinfinitives",num:30,title:"Verbs + Infinitives",emoji:"✍️",cardDesc:"reminded them to vote / promised to help — with or without object",
+explain:[
+"<p>Some verbs are followed <b>directly</b> by an infinitive (no object): <span class='ex-en'>agree · decide · expect · fail · hope · plan · promise · refuse · want</span></p>",
+"<p>Example: <span class='ex-en'>She <b>promised to help</b>. / He <b>refused to sign</b>.</span></p>",
+"<p>Other verbs require an <b>object before</b> the infinitive: <span class='ex-en'>advise · ask · encourage · expect · invite · persuade · remind · urge · warn</span></p>",
+"<p>Example: <span class='ex-en'>The newspaper <b>reminded all 18-year-olds to vote</b>. / We <b>urged them to write</b> letters.</span></p>"
+],
+video:"OaRhJfQqiO4",videoNote:"Verbs Followed by Infinitives in English — With and Without Object",
+exercises:[
+{type:"mcq",q:"'The newspaper ___ all 18-year-olds to vote.' Which verb fits?",options:["promised","reminded","refused","hoped"],correct:1},
+{type:"fill",q:"We ____ them to write letters against the new law.",answers:["urged"]},
+{type:"match",q:"Does the verb need an object before the infinitive?",pairs:[["She promised...","...to help (no object needed)"],["He warned them...","...not to go (object required)"],["They decided...","...to vote (no object needed)"],["She urged him...","...to act (object required)"]]},
+{type:"fill",q:"He ____ to sign the form even though they pressured him.",answers:["refused"]},
+{type:"speak",phrase:"I urge you to vote in the next election. Education policy depends on the people we choose to lead us.",translation:"Te insto a votar en las próximas elecciones. La política educativa depende de las personas que elijamos para liderarnos."},
+{type:"tf",q:"'She persuaded to go' is correct — 'persuade' does not need an object.",correct:false},
+{type:"fill",q:"They ____ him to run for office. He finally agreed.",answers:["encouraged"]},
+{type:"mcq",q:"'I ____ to become a politician someday.' No object needed here — use:",options:["urged","reminded","hope","warned"],correct:2}
+]},
+
+{id:"geographicalfeatures",num:31,title:"Geographical Features",emoji:"🗺️",cardDesc:"ocean, bay, volcano, waterfall, mountain range, national park",isVocab:true,
+explain:[
+"<p>Vocabulary for describing places around the world: <span class='ex-en'>ocean · sea · bay · gulf · lake · mountain · volcano · waterfall · mountain range · national park · capital · coast · cliff · canyon · island</span></p>",
+"<p>Recommending: <span class='ex-en'>It's a must-see! / You don't want to miss it. / It's overrated. / It's a waste of time.</span></p>"
+],
+video:"PLSf5KMF2I4",videoNote:"Geographical Features Vocabulary in English",
+vocab:[
+{cat:"🌍 Land Features",items:[
+{e:"⛰️",w:"mountain range",p:"máunten rein"},{e:"🌋",w:"volcano",p:"völkéino"},
+{e:"💧",w:"waterfall",p:"wótörfol"},{e:"🏜️",w:"canyon",p:"kánion"},
+{e:"🏝️",w:"island",p:"áiland"},{e:"🪨",w:"cliff",p:"klif"}
+]},
+{cat:"💧 Water Features",items:[
+{e:"🌊",w:"ocean",p:"óushön"},{e:"🏖️",w:"bay",p:"bei"},
+{e:"🌊",w:"gulf",p:"golf"},{e:"🏞️",w:"lake",p:"leik"},
+{e:"🌊",w:"coast",p:"koust"},{e:"🦭",w:"shore",p:"shor"}
+]},
+{cat:"🏛️ Human Features",items:[
+{e:"🏛️",w:"national park",p:"náshönöl park"},{e:"🏙️",w:"capital",p:"kápitöl"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the geographical feature with an example.",pairs:[["volcano","Popocatepetl in Mexico"],["waterfall","Iguazu Falls in Argentina"],["national park","Yellowstone in the USA"],["mountain range","The Andes in South America"]]},
+{type:"fill",q:"Iguazu Falls is a spectacular ____. You absolutely must see it!",answers:["waterfall"]},
+{type:"mcq",q:"'It's a must-see!' This expression means:",options:["It's not worth visiting.","You absolutely should see it.","It's overrated.","It's a waste of time."],correct:1},
+{type:"fill",q:"The Amazon River flows into the Atlantic ____.",answers:["Ocean","ocean"]},
+{type:"speak",phrase:"Have you ever been to Patagonia? The mountains, glaciers and fjords are absolutely breathtaking. It's a must-see!",translation:"¿Has estado alguna vez en la Patagonia? Las montañas, los glaciares y los fiordos son absolutamente impresionantes. ¡Es imprescindible verla!"},
+{type:"tf",q:"A 'gulf' is a type of land feature.",correct:false},
+{type:"mcq",q:"'The shore of Lake Titicaca' — what kind of feature is a 'shore'?",options:["the edge of a body of water","a type of mountain","a type of canyon","a man-made structure"],correct:0}
+]},
+
+{id:"prepositionsofplace",num:32,title:"Prepositions of Geographical Place",emoji:"📍",cardDesc:"north of / on the coast / in the central part / to the south",
+explain:[
+"<p>Use these prepositions to describe where places are located:</p>",
+"<p><span class='ex-en'>Mexico is <b>north of</b> Guatemala. / Honduras is <b>to the south</b>. / Tikal is <b>in the north</b>. / Cobán is <b>in the central part of</b> Guatemala. / Champerico is <b>on the west coast of</b> Guatemala.</span></p>"
+],
+video:"Bv_B-sSMCLo",videoNote:"Prepositions of Place — Describing Geographical Locations",
+exercises:[
+{type:"fill",q:"Vladivostok is located ____ the eastern coast of Russia.",answers:["on"]},
+{type:"mcq",q:"'Barranquilla is ___ the northern part ___ Colombia.'",options:["in / of","on / of","at / in","in / in"],correct:0},
+{type:"match",q:"Match the location expression with its use.",pairs:[["north of","comparing position of two places"],["in the north","describing general area within a country"],["on the coast","describing a place by the sea"],["in the central part","describing a place in the middle"]]},
+{type:"fill",q:"Machu Picchu is located about 100 kilometers northwest ____ Cuzco.",answers:["of"]},
+{type:"speak",phrase:"Colombia is north of Ecuador and south of Panama. Bogota is located in the central part of the country.",translation:"Colombia está al norte de Ecuador y al sur de Panamá. Bogotá está ubicada en la parte central del país."},
+{type:"fill",q:"Manaus is located ____ the Amazon River in Brazil.",answers:["on"]},
+{type:"tf",q:"'Canada is in the north of the United States' means Canada is north of the USA.",correct:true},
+{type:"order",q:"Order the sentence:",words:["on","located","the","Haikou","of","coast","northern","is","China."],correct:"Haikou is located on the northern coast of China."}
+]},
+
+{id:"tooadjective",num:33,title:"Too + Adjective + Infinitive",emoji:"⚠️",cardDesc:"too dangerous to go / too dark for children to swim",
+explain:[
+"<p>Use <b>too + adjective + infinitive</b> to give a warning or explain why something is not possible:</p>",
+"<p><span class='ex-en'>It's <b>too dark to go</b> hiking now. = You'd better not go hiking because it's dark.</span></p>",
+"<p>Add <b>for + person</b> to specify who: <span class='ex-en'>It's <b>too dangerous for children to</b> swim there.</span></p>"
+],
+video:"VhVo5g4T5Mg",videoNote:"Too + Adjective + Infinitive — English Grammar",
+exercises:[
+{type:"fill",q:"It's ____ dangerous to go to that neighborhood alone at night.",answers:["too"]},
+{type:"mcq",q:"'It's too hot for us to go hiking today.' This means:",options:["We will definitely go hiking.","We should not go hiking because it's too hot.","Going hiking is possible but difficult."],correct:1},
+{type:"fill",q:"The cliff is too steep for ____ tourists to climb.",answers:["older","elderly"]},
+{type:"match",q:"Match the warning with its meaning.",pairs:[["It's too dark to go hiking.","Don't hike because it's dark."],["The path is too rocky for children.","Children can't walk safely on this path."],["It's too late to catch the train.","You've missed the train."],["The water is too cold for swimming.","You shouldn't swim here."]]},
+{type:"speak",phrase:"Be careful! The cliffs are too dangerous for anyone to climb alone. It's also too foggy to see the path clearly.",translation:"¡Ten cuidado! Los acantilados son demasiado peligrosos para que nadie los escale solo. Además, hay demasiada niebla para ver el camino con claridad."},
+{type:"tf",q:"'It's too rocky for your children to walk on safely.' This is a correct sentence.",correct:true},
+{type:"fill",q:"The pyramid is too ____ for older tourists to climb.",answers:["steep"]},
+{type:"order",q:"Order the warning:",words:["for","swim","too","there.","cold","is","children","The","water","to"],correct:"The water is too cold for children to swim there."}
+]},
+
+{id:"naturaladjectives",num:34,title:"Nature & Place Adjectives",emoji:"🌿",cardDesc:"spectacular, breathtaking, extraordinary, ancient, stunning",
+explain:[
+"<p>Use these adjectives to describe natural places and landscapes:</p>",
+"<p><span class='ex-en'><b>spectacular · breathtaking · extraordinary · stunning · magnificent</b></span></p>",
+"<p><span class='ex-en'><b>ancient</b> (very old) · <b>remote</b> (far from cities) · <b>lush</b> (green and rich) · <b>arid</b> (very dry) · <b>rugged</b> (rough terrain)</span></p>"
+],
+video:"oT2cQ_a6hZQ",videoNote:"Describing Nature and Places — Advanced Vocabulary",
+vocab:[
+{cat:"✨ Positive Adjectives",items:[
+{e:"🌅",w:"spectacular",p:"spektákiulör"},{e:"😮",w:"breathtaking",p:"brézteikig"},
+{e:"🤩",w:"extraordinary",p:"ekstrórdöneri"},{e:"💫",w:"stunning",p:"stóning"},
+{e:"🏛️",w:"ancient",p:"éinshönt"},{e:"🌿",w:"lush",p:"losh"}
+]},
+{cat:"🏜️ Terrain Adjectives",items:[
+{e:"🏜️",w:"arid",p:"árid"},{e:"🪨",w:"rugged",p:"rógöd"},
+{e:"🌫️",w:"remote",p:"rimout"},{e:"⛰️",w:"steep",p:"stiip"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the adjective with its meaning.",pairs:[["breathtaking","so beautiful it takes your breath away"],["ancient","very, very old"],["arid","very dry, little water"],["lush","rich, green, full of vegetation"]]},
+{type:"fill",q:"The views from the top of the mountain were absolutely ____.",answers:["spectacular","breathtaking","stunning","extraordinary"]},
+{type:"mcq",q:"'An ancient forest' means the forest is:",options:["very remote","very green","thousands of years old","very dangerous"],correct:2},
+{type:"fill",q:"The Atacama Desert is the most ____ place on Earth — it almost never rains.",answers:["arid"]},
+{type:"speak",phrase:"The Iguazu Falls are absolutely breathtaking — spectacular waterfalls, lush vegetation and extraordinary natural beauty.",translation:"Las Cataratas del Iguazú son absolutamente impresionantes: cascadas espectaculares, vegetación exuberante y una belleza natural extraordinaria."},
+{type:"tf",q:"'Remote' describes a place that is very close to a big city.",correct:false},
+{type:"mcq",q:"'Rugged terrain' means:",options:["flat and easy to walk on","rough, uneven ground","beautiful and well-maintained","soft and sandy"],correct:1}
+]},
+
+{id:"dangerousanimals",num:35,title:"Dangerous Animals & Warnings",emoji:"🦎",cardDesc:"mosquitoes, snakes, insects — vocabulary and warnings",isVocab:true,
+explain:[
+"<p>When traveling to natural areas, you may encounter dangerous animals: <span class='ex-en'>mosquito · snake · scorpion · jaguar · crocodile · jellyfish · sea urchin · wasp · bee</span></p>",
+"<p>Giving warnings: <span class='ex-en'>Watch out for... / Be careful of... / Stay away from... / There are lots of... in the mountains this time of year.</span></p>",
+"<p>Expressions: <span class='ex-en'>get eaten alive (by mosquitoes) / the mosquitoes were brutal / bite the bullet / I'm packing a mosquito net</span></p>"
+],
+video:"P9G8MV_KZIM",videoNote:"Dangerous Animals and Safety Warnings — English Vocabulary",
+vocab:[
+{cat:"🦟 Insects & Small Creatures",items:[
+{e:"🦟",w:"mosquito",p:"möskíto"},{e:"🦂",w:"scorpion",p:"skórpiön"},
+{e:"🐝",w:"wasp / bee",p:"wosp/bii"},{e:"🦗",w:"insect repellent",p:"rípeönt"},
+{e:"🛏️",w:"mosquito net",p:"möskíto net"}
+]},
+{cat:"🐍 Larger Animals",items:[
+{e:"🐍",w:"snake",p:"sneik"},{e:"🐊",w:"crocodile",p:"krókodail"},
+{e:"🦁",w:"jaguar",p:"yáguar"},{e:"🦈",w:"shark",p:"shark"},
+{e:"🪼",w:"jellyfish",p:"yélifish"}
+]}
+],
+exercises:[
+{type:"match",q:"Match the animal to the habitat.",pairs:[["shark","ocean"],["mosquito","tropical areas and swamps"],["scorpion","desert"],["crocodile","rivers and wetlands"]]},
+{type:"fill",q:"We got eaten ____ last weekend! The mosquitoes were brutal.",answers:["alive"]},
+{type:"mcq",q:"'I'm packing a mosquito net.' What is this for?",options:["to catch mosquitoes","to sleep under to protect from mosquito bites","to kill mosquitoes","to carry food"],correct:1},
+{type:"fill",q:"____ out for snakes on the trail. They hide under rocks.",answers:["Watch"]},
+{type:"speak",phrase:"Watch out — there are tons of mosquitoes in the mountains this time of year. Pack insect repellent and a mosquito net!",translation:"Cuidado: hay muchísimos mosquitos en las montañas en esta época del año. ¡Lleva repelente de insectos y mosquitero!"},
+{type:"tf",q:"'The mosquitoes were brutal' is a formal way to describe mild insect bites.",correct:false},
+{type:"mcq",q:"'You just have to bite the bullet and use the stuff that works.' 'Bite the bullet' means:",options:["literally bite something","endure something unpleasant","avoid the problem","use natural remedies"],correct:1}
+]},
+
+{id:"grandreview",num:36,title:"Grand Review — WB4",emoji:"🌟",cardDesc:"Mixed grammar and vocabulary from all 10 units",
+explain:[
+"<p>¡Estacion final! Esta revision combina gramatica y vocabulario de todos los <b>10 unidades</b> del Workbook 4.</p>",
+"<p>Temas incluidos: tag questions · past perfect · modals · causatives · indirect speech · conditionals · adjective clauses · abstract nouns · geographical vocabulary y mucho mas.</p>"
+],
+video:"6AXxYiIIVtI",videoNote:"B1+ English Review — Comprehensive Grammar and Vocabulary Practice",
+exercises:[
+{type:"mcq",q:"'It's customary in Thailand to remove your shoes before entering a home, ___ ___?' — Tag question:",options:["is it?","isn't it?","was it?","doesn't it?"],correct:1},
+{type:"fill",q:"By the time we arrived, the meeting had already ____.",answers:["started","begun"]},
+{type:"mcq",q:"'The dentist isn't answering. She ___ not be in today.' Modal:",options:["must","might","should","can"],correct:0},
+{type:"fill",q:"I got the hotel to ____ us a late checkout.",answers:["give","agree"]},
+{type:"mcq",q:"'The weather is awful' → indirect speech:",options:["She said the weather is awful.","She said the weather was awful.","She said the weather will be awful."],correct:1},
+{type:"fill",q:"If I ____ you, I would visit Iguazu Falls before the Patagonian mountains.",answers:["were"]},
+{type:"mcq",q:"'A thriller is a type of book ___ keeps you reading all night.' Choose the relative pronoun:",options:["who","that","what","whom"],correct:1},
+{type:"fill",q:"____ is important for a healthy democracy.",answers:["Education","Justice","Progress","Peace"]},
+{type:"speak",phrase:"If I had known how breathtaking Patagonia was, I would have stayed longer. I should have booked more days!",translation:"Si hubiera sabido lo impresionante que era la Patagonia, me habría quedado más tiempo. ¡Debería haber reservado más días!"},
+{type:"match",q:"Match each grammar point with an example.",pairs:[["Tag question","It's taboo, isn't it?"],["Past unreal conditional","If she had known, she would have stayed."],["Adjective clause","A holiday that takes place in spring."],["Perfect modal","She must have left already."]]},
+{type:"fill",q:"The Amazon River is located ____ the northern part ____ Brazil.",answers:["in ... of"]},
+{type:"order",q:"Order the sentence:",words:["too","for","steep","is","cliff","children","The","climb.","to"],correct:"The cliff is too steep for children to climb."}
+]},
+
+];
+
+const CHAT_SCENARIOS = {
+  healthmatters:{
+    name:"🏥 Health & Medicine",
+    hint:"Habla sobre salud, síntomas y citas médicas",
+    steps:[
+      {bot:"Hi! You look a bit pale. Are you feeling okay?", sugg:["Not really. I've been feeling dizzy and nauseous all day.","I'm a bit under the weather. I think I have a cold.","Actually, I've had a bad cough and I'm short of breath."], expect:["dizzy","nauseous","sick","cough","breath","cold","okay","under","weather","pale"]},
+      {bot:"Oh no. That must be really uncomfortable. Have you seen a doctor yet?", sugg:["Not yet. I was wondering if you could recommend a good clinic.","I have an appointment tomorrow. The doctor might do a blood test.","I called the clinic but no one answered. They must not be open today."], expect:["not yet","appointment","doctor","clinic","blood","test","must","might","open","tomorrow"]},
+      {bot:"You should go soon. What kind of treatment do you prefer — conventional medicine or alternative treatments?", sugg:["I prefer conventional medicine. I trust science.","I sometimes try herbal therapy or acupuncture for minor issues.","I believe both can work. I may have tried homeopathy once."], expect:["conventional","herbal","acupuncture","homeopathy","prefer","trust","believe","try","alternative","science"]},
+      {bot:"Interesting! By the way, did you get the documents copied for the meeting last week? I heard you had a lot on your plate.", sugg:["Yes! I had my assistant handle everything. It was last minute.","I got them done just in time. Sam was a lifesaver!","I made my brother help me. We got it all done by midnight."], expect:["had","got","made","assistant","last minute","lifesaver","done","time","handle","midnight"]},
+      {bot:"You should have planned ahead. I hope you feel better soon. If you had rested this weekend, you might feel better today.", sugg:["You're right. I should have rested instead of working all weekend.","I know! If I had gone to the doctor sooner, I might have recovered faster.","I must have been overworking. I could have taken a day off!"], expect:["should have","if","had","might","could have","rested","worked","doctor","sooner","recovered"]},
+      {bot:"Take care of yourself! Health is more important than work. News about your health should never be ignored!", sugg:["You're absolutely right. Health comes first!","I agree. I'm going to make an appointment right away.","Thanks for the reminder. Health and education are life's most important things."], expect:["health","right","important","agree","appointment","education","thanks","first","work","reminder"]},
+      {bot:"Feel better soon! Take care!", sugg:["Thank you! I'll go see a doctor today.","Thanks Alex! I appreciate your concern.","I will! See you around, take care!"], expect:["thank","doctor","appreciate","take care","see you","will","better"]}
+    ]
+  },
+  worldtravel:{
+    name:"🌍 World Travel & Places",
+    hint:"Habla de viajes, lugares y geografía",
+    steps:[
+      {bot:"Hi! I just got back from a trip to Patagonia. It was breathtaking! Have you ever traveled to South America?", sugg:["Yes! I've been to Colombia and Peru. The landscapes were spectacular.","Not yet, but I've always wanted to visit the Iguazu Falls.","I haven't been to South America yet, but I'd love to go."], expect:["yes","been","colombia","peru","iguazu","spectacular","breathtaking","not yet","always","wanted","south"]},
+      {bot:"You don't want to miss Patagonia — it's a must-see! The cliffs and mountain ranges are extraordinary. Where in the world would you most like to visit?", sugg:["I'd love to see Japan. The ancient temples and lush forests are stunning.","I dream of visiting Iceland — the volcanoes and waterfalls are breathtaking.","Africa is on my mind — the wildlife and rugged terrain are extraordinary."], expect:["japan","iceland","africa","ancient","lush","volcanic","waterfall","breathtaking","stunning","extraordinary","dream","love"]},
+      {bot:"Great choice! By the way, do you know where Iceland is located geographically? Is it north of the UK?", sugg:["Yes! Iceland is located north of the UK, in the North Atlantic Ocean.","It's in the northern part of Europe, on the coast between the Atlantic and Arctic Oceans.","Iceland is northwest of Norway, on the shore of the Atlantic Ocean."], expect:["north","atlantic","ocean","coast","located","europe","norway","arctic","northwest","shore","uk"]},
+      {bot:"Exactly! Now, a tricky question — if you had unlimited money, where would you go and what would you do?", sugg:["If I had unlimited money, I would visit every national park in the world.","If I were rich, I'd spend a year exploring the ancient ruins of South America.","I would travel to every continent! If I had more time, I'd have done it already."], expect:["if","would","had","national park","ancient","ruins","continent","travel","explore","rich","money","year"]},
+      {bot:"That sounds amazing! One more thing — what's something you should have done on a past trip but didn't?", sugg:["I should have visited Machu Picchu when I was in Peru. I ran out of time.","I could have taken a boat trip on the Amazon but I was too scared.","I might have hiked the Inca Trail if I had been better prepared."], expect:["should have","could have","might have","machu picchu","amazon","peru","scared","prepared","trip","time","hiked"]},
+      {bot:"We all have those travel regrets! If you could give one tip to a traveler visiting your country, what would it be?", sugg:["I'd tell them to try the local food — it's too good to miss!","I'd warn them that some areas are too remote to visit without a guide.","I'd remind them to be careful of mosquitoes — they can be brutal!"], expect:["food","local","guide","mosquito","careful","remote","warn","remind","tip","try","miss","brutal"]},
+      {bot:"Great advice! It was wonderful chatting with you about the world. Safe travels!", sugg:["Thank you! I loved talking about travel and geography.","It was great! You've inspired me to plan my next trip.","Thanks Alex! See you around — happy travels!"], expect:["thank","loved","great","inspired","plan","trip","travels","see you","happy"]}
+    ]
+  },
+  debateclub:{
+    name:"🏛️ Debate & Politics",
+    hint:"Debate sobre temas controversiales y política",
+    steps:[
+      {bot:"Hi! Let's have a civil debate. First question: Do you think education should be free for everyone?", sugg:["I believe education is a right. Justice requires that everyone has access.","In my opinion, free education is too expensive. Progress requires investment.","From my point of view, poverty is reduced when education is accessible."], expect:["believe","opinion","view","education","justice","poverty","progress","right","free","access","invest","think"]},
+      {bot:"Interesting! On the other hand, some say private education offers better quality. Do you agree?", sugg:["That may be true, but public education gives equal opportunities to everyone.","I couldn't agree more. Competition improves quality.","I have to disagree — quality education shouldn't depend on wealth.","I'm not sure I agree. We need proof that private schools are always better."], expect:["agree","disagree","may be true","on the other hand","public","private","equal","quality","proof","wealth","opportunities"]},
+      {bot:"Good debate! Now, do you think democracy is the best form of government for all countries?", sugg:["Yes! I believe democracy is the fairest system — everyone gets to vote.","Not necessarily. Some countries need time to develop democratic institutions.","In my opinion, a constitutional monarchy can also work very well."], expect:["democracy","vote","government","believe","opinion","constitutional","monarchy","fairest","system","countries","develop"]},
+      {bot:"Very thoughtful! Now a personal question — if you could change one political policy in your country, what would it be?", sugg:["If I could change one thing, I would invest more in public education.","I would urge the government to do more to reduce poverty.","I'd encourage more investment in peace programs and conflict resolution."], expect:["if","would","change","invest","education","poverty","peace","government","urge","encourage","policy","conflict"]},
+      {bot:"I agree — those are important issues. Final question: Do you consider yourself liberal, conservative or moderate?", sugg:["I consider myself moderate — I believe balanced views lead to better solutions.","I tend to be liberal. I support change and respect for different beliefs.","I'm somewhere between liberal and moderate. I'm open to new ideas but value tradition."], expect:["moderate","liberal","conservative","believe","support","change","respect","tradition","open","values","balanced","solutions"]},
+      {bot:"That's very self-aware! Remember: good news is that people can change their minds. Great debate!", sugg:["Thank you! I really enjoyed this debate. It made me think deeply.","It was great! I should have joined a debate club earlier.","Thanks Alex! I love discussing these issues. See you next time!"], expect:["thank","enjoyed","debate","think","love","great","see you","earlier","should have","minds"]}
+    ]
+  }
+};
+</script>
+
+<script>
+// ══════════════════════════════════
+//  CORE STATE + SPEECH
+// ══════════════════════════════════
+const TOTAL_EX = TOPICS.filter(t=>!t.isChat).reduce((a,t)=>a+t.exercises.length,0);
+const progress = {};
+TOPICS.forEach(t=>{ if(!t.isChat) progress[t.id]=new Array(t.exercises.length).fill(false); });
+
+let englishVoice=null;
+function loadVoices(){
+  if(!('speechSynthesis' in window)) return;
+  const list=window.speechSynthesis.getVoices()||[];
+  if(!list.length) return;
+  const pref=["Google US English","Microsoft Zira","Microsoft David","Samantha","Alex","Karen"];
+  englishVoice=list.find(v=>pref.includes(v.name)&&v.lang&&v.lang.toLowerCase().startsWith('en'))
+    ||list.find(v=>v.lang==='en-US')||list.find(v=>v.lang&&v.lang.toLowerCase().startsWith('en-'))||null;
+}
+if('speechSynthesis' in window){ loadVoices(); window.speechSynthesis.onvoiceschanged=loadVoices; }
+function speak(text,rate){
+  if(!('speechSynthesis' in window)) return;
+  if(!englishVoice) loadVoices();
+  try{
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    if(englishVoice){u.voice=englishVoice;u.lang=englishVoice.lang;}else{u.lang='en-US';}
+    u.rate=rate||0.82;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+// SpeechRecognition setup
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+let activeRecognizer=null;
+function createRecognizer(onResult,onEnd){
+  if(!SR) return null;
+  const r=new SR();
+  r.lang='en-US'; r.continuous=false; r.interimResults=false;
+  r.onresult=e=>{ const t=e.results[0][0].transcript; onResult(t); };
+  r.onend=onEnd||function(){};
+  r.onerror=()=>{ onEnd&&onEnd(); };
+  return r;
+}
+
+function norm(s){ return (s||'').toLowerCase().replace(/[.,!?¿¡']/g,'').trim().replace(/\s+/g,' '); }
+function totalScore(){ let s=0; Object.values(progress).forEach(a=>a.forEach(v=>{if(v)s++;})); return s; }
+function updatePill(){ document.getElementById('scoreText').textContent=totalScore()+'/'+TOTAL_EX; }
+function topicDone(t){ return progress[t.id].every(v=>v); }
+function topicCount(t){ return progress[t.id].filter(v=>v).length; }
+
+// ══════════════════════════════════
+//  MAP
+// ══════════════════════════════════
+function renderMap(){
+  const list=document.getElementById('pathList');
+  list.innerHTML='';
+  const _sorted=[...TOPICS].sort((a,b)=>a.num-b.num);
+  _sorted.forEach((t,i)=>{
+    const color=COLORS[i%COLORS.length];
+    const done=t.isChat ? false : topicDone(t);
+    const n=document.createElement('div');
+    n.className='node'+(done?' done':'');
+    n.style.animationDelay=(i*.04)+'s';
+    n.onclick=()=>openTopic(t.id);
+    const stat=t.isChat?'🎤 Chat':done?'✓ Listo':topicCount(t)+'/'+t.exercises.length;
+    n.innerHTML=`<span class="nnum">#${t.num}</span>
+      <div class="nbadge" style="background:linear-gradient(145deg,${color},${color}cc);box-shadow:0 5px 14px ${color}55;">${t.emoji}</div>
+      <div class="ninfo"><h3>${t.title}</h3><p>${t.cardDesc}</p></div>
+      <div class="nstat">${stat}</div>`;
+    list.appendChild(n);
+  });
+  updatePill();
+}
+
+function goMap(){
+  document.getElementById('mapview').style.display='block';
+  document.getElementById('topicview').classList.remove('active');
+  if(activeRecognizer){try{activeRecognizer.stop();}catch(e){}} activeRecognizer=null;
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  renderMap();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════
+//  TOPIC VIEW
+// ══════════════════════════════════
+function openTopic(id){
+  const t=TOPICS.find(x=>x.id===id);
+  const i=TOPICS.indexOf(t);
+  const color=COLORS[i%COLORS.length];
+  document.getElementById('mapview').style.display='none';
+  document.getElementById('topicview').classList.add('active');
+  document.getElementById('tvBadge').style.background=`linear-gradient(145deg,${color},${color}cc)`;
+  document.getElementById('tvBadge').textContent=t.emoji;
+  document.getElementById('tvTitle').textContent=t.title;
+  document.getElementById('tvSub').textContent='Estación '+t.num+' de '+TOPICS.length;
+  document.getElementById('tvExplainBody').innerHTML=(t.explain||[]).join('');
+
+  // video
+  const vc=document.getElementById('tvVideoCard');
+  if(t.video){
+    vc.style.display='block';
+    const wrap=document.getElementById('tvVideoWrap');
+    wrap.className='videoplaceholder';
+    wrap.innerHTML=`<img src="https://img.youtube.com/vi/${t.video}/hqdefault.jpg" alt="${t.videoNote}" loading="lazy"><div class="playbtn">▶</div><div class="playlabel">Toca para reproducir</div>`;
+    wrap.onclick=function(){
+      wrap.className='videowrap'; wrap.onclick=null;
+      wrap.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${t.video}?rel=0&autoplay=1" title="${t.videoNote}" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>`;
+    };
+    document.getElementById('tvVideoNote').textContent=t.videoNote||'';
+    document.getElementById('tvVideoFallback').href=`https://www.youtube.com/watch?v=${t.video}`;
+  } else { vc.style.display='none'; }
+
+  // pronunciation tool
+  const tc=document.getElementById('tvToolCard'), tb=document.getElementById('tvToolBody');
+  tb.innerHTML='';
+  if(t.tool){
+    tc.style.display='block';
+    const hint=document.createElement('p'); hint.className='toolhint'; hint.textContent=t.tool.hint;
+    const grid=document.createElement('div'); grid.className='toolgrid';
+    const disp=document.createElement('div'); disp.className='tooldisplay';
+    const warn=document.createElement('div'); warn.className='toolwarn';
+    warn.textContent='⚠️ No encontramos voz en inglés en este dispositivo. Para mejor experiencia usa Chrome en computadora e instala el paquete de voz inglés en tu sistema.';
+    t.tool.items.forEach(item=>{
+      const b=document.createElement('button'); b.className='toolbtn'; b.textContent=item.label;
+      b.onclick=()=>{ speak(item.speak); disp.innerHTML=`<b>${item.label}</b> = "${item.phon}"`; b.classList.remove('playing'); void b.offsetWidth; b.classList.add('playing'); if(!englishVoice) warn.classList.add('show'); };
+      grid.appendChild(b);
+    });
+    tb.appendChild(hint); tb.appendChild(grid); tb.appendChild(disp); tb.appendChild(warn);
+  } else { tc.style.display='none'; }
+
+  // vocab cards
+  const vc2=document.getElementById('tvVocabCard'), vb=document.getElementById('tvVocabBody');
+  vb.innerHTML='';
+  if(t.vocab){
+    vc2.style.display='block';
+    t.vocab.forEach(cat=>{
+      const cl=document.createElement('div'); cl.className='vcategory'; cl.textContent=cat.cat;
+      const grid=document.createElement('div'); grid.className='vocabgrid';
+      cat.items.forEach(item=>{
+        const c=document.createElement('div'); c.className='vocabcard';
+        c.innerHTML=`<span class="vcemoji">${item.e}</span><span class="vcword">${item.w}</span><span class="vcpron">/${item.p}/</span>`;
+        c.onclick=()=>{ speak(item.w); c.classList.remove('playing'); void c.offsetWidth; c.classList.add('playing'); setTimeout(()=>c.classList.remove('playing'),700); };
+        grid.appendChild(c);
+      });
+      vb.appendChild(cl); vb.appendChild(grid);
+    });
+  } else { vc2.style.display='none'; }
+
+  // exercises vs chat
+  document.getElementById('tvChatSection').style.display=t.isChat?'block':'none';
+  document.getElementById('tvExercises').innerHTML='';
+  if(t.isChat){
+    document.getElementById('tvVideoCard').style.display='none';
+    renderChat();
+  } else {
+    renderExercises(t);
+  }
+  document.getElementById('tvDone').classList.remove('show');
+  if(!t.isChat && topicDone(t)) document.getElementById('tvDone').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════
+//  EXERCISE RENDERERS
+// ══════════════════════════════════
+function renderExercises(t){
+  const box=document.getElementById('tvExercises');
+  box.innerHTML='';
+  t.exercises.forEach((ex,idx)=>{
+    const wrap=document.createElement('div');
+    wrap.className='exo'+(progress[t.id][idx]?' solved':'');
+    const tags={mcq:'Opción múltiple',fill:'Completa',tf:'Verdadero o falso',match:'Relaciona',emoji:'Emoji',order:'Ordena',speak:'Pronuncia'};
+    wrap.innerHTML=`<div class="exo-top"><span class="exo-tag">Ej ${idx+1} · ${tags[ex.type]||ex.type}</span><span class="exo-check">${progress[t.id][idx]?'✓':''}</span></div><p class="qtext">${ex.q||''}</p><div class="exo-body"></div>`;
+    box.appendChild(wrap);
+    const body=wrap.querySelector('.exo-body');
+    if(ex.type==='mcq'||ex.type==='tf'||ex.type==='emoji'){
+      const opts=ex.type==='tf'?['Verdadero','Falso']:ex.options;
+      const d=document.createElement('div');
+      d.className=ex.type==='tf'?'tfrow':ex.type==='emoji'?'opts emoji-opts':'opts';
+      opts.forEach((op,oi)=>{
+        const b=document.createElement('button'); b.className='opt'+(ex.type==='emoji'?' opt-emoji':''); b.textContent=op;
+        b.onclick=()=>{
+          if(wrap.classList.contains('solved')) return;
+          const ok=ex.type==='tf'?(oi===0)===ex.correct:oi===ex.correct;
+          if(ok){ b.classList.add('correct'); d.querySelectorAll('.opt').forEach(x=>x.disabled=true); markSolved(t,idx,wrap); }
+          else { b.classList.add('wrong'); setTimeout(()=>b.classList.remove('wrong'),450); }
+        };
+        d.appendChild(b);
+      });
+      body.appendChild(d);
+    } else if(ex.type==='fill'){
+      const row=document.createElement('div'); row.className='fillrow';
+      const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Escribe en inglés…';
+      const btn=document.createElement('button'); btn.className='checkbtn'; btn.textContent='Verificar';
+      const fb=document.createElement('div');
+      inp.onkeydown=e=>{ if(e.key==='Enter') btn.click(); };
+      btn.onclick=()=>{
+        if(wrap.classList.contains('solved')) return;
+        const v=norm(inp.value);
+        const ok=ex.answers.some(a=>norm(a)===v);
+        if(ok){ inp.classList.add('correct'); inp.disabled=true; btn.disabled=true; fb.className='fb ok'; fb.textContent='¡Correcto! 🌟'; markSolved(t,idx,wrap); }
+        else { inp.classList.add('wrong'); setTimeout(()=>inp.classList.remove('wrong'),450); fb.className='fb no'; fb.textContent=ex.hint?'Casi. Pista: '+ex.hint:'Intenta de nuevo.'; }
+        row.parentNode.appendChild(fb);
+      };
+      row.appendChild(inp); row.appendChild(btn); body.appendChild(row);
+    } else if(ex.type==='match'){
+      renderMatch(ex,wrap,body,t,idx);
+    } else if(ex.type==='order'){
+      renderOrder(ex,wrap,body,t,idx);
+    } else if(ex.type==='speak'){
+      renderSpeak(ex,wrap,body,t,idx);
+    }
+  });
+}
+
+function renderMatch(ex,wrap,body,t,idx){
+  const grid=document.createElement('div'); grid.className='matchgrid';
+  const lc=document.createElement('div'); lc.className='matchcol';
+  const rc=document.createElement('div'); rc.className='matchcol';
+  const lefts=ex.pairs.map((p,pi)=>({label:p[0],pi}));
+  const rights=ex.pairs.map((p,pi)=>({label:p[1],pi}));
+  for(let i=rights.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rights[i],rights[j]]=[rights[j],rights[i]];}
+  let selL=null,selR=null,matched=0;
+  function tryM(){
+    if(selL===null||selR===null) return;
+    const lb=lc.children[selL.idx],rb=rc.children[selR.idx];
+    if(selL.pi===selR.pi){
+      lb.classList.remove('sel'); rb.classList.remove('sel');
+      lb.classList.add('matched'); rb.classList.add('matched');
+      lb.onclick=null; rb.onclick=null; matched++;
+      if(matched===ex.pairs.length&&!wrap.classList.contains('solved')) markSolved(t,idx,wrap);
+    } else {
+      lb.classList.add('wrong'); rb.classList.add('wrong');
+      setTimeout(()=>{lb.classList.remove('sel','wrong');rb.classList.remove('sel','wrong');},420);
+    }
+    selL=null; selR=null;
+  }
+  lefts.forEach((item,i)=>{
+    const b=document.createElement('button'); b.className='matchitem'; b.textContent=item.label;
+    b.onclick=()=>{
+      if(b.classList.contains('matched')||wrap.classList.contains('solved')) return;
+      lc.querySelectorAll('.matchitem').forEach(x=>{if(!x.classList.contains('matched'))x.classList.remove('sel');});
+      b.classList.add('sel'); selL={pi:item.pi,idx:i}; tryM();
+    };
+    lc.appendChild(b);
+  });
+  rights.forEach((item,i)=>{
+    const b=document.createElement('button'); b.className='matchitem'; b.textContent=item.label;
+    b.onclick=()=>{
+      if(b.classList.contains('matched')||wrap.classList.contains('solved')) return;
+      rc.querySelectorAll('.matchitem').forEach(x=>{if(!x.classList.contains('matched'))x.classList.remove('sel');});
+      b.classList.add('sel'); selR={pi:item.pi,idx:i}; tryM();
+    };
+    rc.appendChild(b);
+  });
+  grid.appendChild(lc); grid.appendChild(rc); body.appendChild(grid);
+  if(progress[t.id][idx]){
+    lc.querySelectorAll('.matchitem').forEach(b=>b.classList.add('matched'));
+    rc.querySelectorAll('.matchitem').forEach(b=>b.classList.add('matched'));
+  }
+}
+
+function renderOrder(ex,wrap,body,t,idx){
+  const shuffled=[...ex.words].sort(()=>Math.random()-.5);
+  const labels=document.createElement('div'); labels.className='order-labels';
+  labels.innerHTML='<span>Palabras disponibles:</span><span>Tu respuesta:</span>';
+  const pool=document.createElement('div'); pool.className='order-pool';
+  const ans=document.createElement('div'); ans.className='order-answer empty';
+  const fb=document.createElement('div');
+  const answer=[];
+  function rebuildPool(){
+    pool.innerHTML='';
+    shuffled.forEach((w,si)=>{
+      if(answer.includes(si)) return;
+      const c=document.createElement('button'); c.className='chip'; c.textContent=w;
+      c.onclick=()=>{
+        if(wrap.classList.contains('solved')) return;
+        answer.push(si); addToAnswer(w,si); rebuildPool(); checkOrder();
+      };
+      pool.appendChild(c);
+    });
+  }
+  function addToAnswer(w,si){
+    ans.classList.remove('empty');
+    const c=document.createElement('button'); c.className='chip in-answer'; c.textContent=w;
+    c.onclick=()=>{
+      if(wrap.classList.contains('solved')) return;
+      const pos=answer.indexOf(si); if(pos>-1) answer.splice(pos,1);
+      c.remove(); if(!ans.children.length) ans.classList.add('empty');
+      rebuildPool(); fb.textContent=''; fb.className='fb';
+    };
+    ans.appendChild(c);
+  }
+  function checkOrder(){
+    if(answer.length!==shuffled.length) return;
+    const built=answer.map(si=>shuffled[si]).join(' ');
+    const ok=norm(built)===norm(ex.correct);
+    if(ok){
+      ans.querySelectorAll('.chip').forEach(c=>c.classList.add('chip-correct'));
+      fb.className='fb ok'; fb.textContent='¡Correcto! 🌟';
+      markSolved(t,idx,wrap);
+    } else {
+      ans.querySelectorAll('.chip').forEach(c=>{ c.classList.add('chip-wrong'); setTimeout(()=>c.classList.remove('chip-wrong'),450); });
+      fb.className='fb no'; fb.textContent='Orden incorrecto. Toca las palabras en azul para quitarlas.';
+    }
+  }
+  rebuildPool();
+  body.appendChild(labels); body.appendChild(pool); body.appendChild(ans); body.appendChild(fb);
+}
+
+function renderSpeak(ex,wrap,body,t,idx){
+  const phrase=document.createElement('div'); phrase.className='speak-phrase';
+  phrase.innerHTML=`<span class="phrase-text">${ex.phrase}</span><span class="phrase-tr">${ex.translation}</span>`;
+  const ctrl=document.createElement('div'); ctrl.className='speak-controls';
+  const mic=document.createElement('button'); mic.className='micbtn'; mic.title='Hablar'; mic.textContent='🎤';
+  const transcript=document.createElement('div'); transcript.className='speak-transcript'; transcript.textContent='Toca 🎤 para hablar…';
+  const result=document.createElement('div'); result.className='speak-result';
+  const playBtn=document.createElement('button'); playBtn.className='speak-playbtn'; playBtn.textContent='▶ Escuchar';
+  playBtn.onclick=()=>speak(ex.phrase,0.75);
+  const markBtn=document.createElement('button'); markBtn.className='speak-markbtn'; markBtn.textContent='✓ Practicado';
+  markBtn.onclick=()=>{ if(!wrap.classList.contains('solved')) markSolved(t,idx,wrap); };
+  const status=document.createElement('div'); status.className='speak-status';
+  if(!SR){ status.textContent='ℹ️ Tu navegador no soporta micrófono. Usa Chrome. Toca ▶ para escuchar, luego "Practicado".'; mic.disabled=true; }
+  else {
+    mic.onclick=()=>{
+      if(activeRecognizer){try{activeRecognizer.stop();}catch(e){}}
+      mic.classList.add('recording'); transcript.textContent='Escuchando…'; status.textContent='';
+      const r=createRecognizer(text=>{
+        transcript.textContent=text;
+        const heard=norm(text), target=norm(ex.phrase);
+        const words=target.split(' ');
+        const matchedW=words.filter(w=>w.length>2&&heard.includes(w)).length;
+        const score=matchedW/words.length;
+        if(score>=0.5||heard===target){
+          transcript.style.color='var(--green)';
+          status.textContent='✅ ¡Excelente pronunciación!';
+          if(!wrap.classList.contains('solved')) markSolved(t,idx,wrap);
+        } else {
+          transcript.style.color='var(--gold)';
+          status.textContent='Sigue practicando — toca ▶ para escuchar el modelo.';
+        }
+      },()=>{ mic.classList.remove('recording'); });
+      activeRecognizer=r;
+      try{ r.start(); }catch(e){ mic.classList.remove('recording'); status.textContent='Error de micrófono. Intenta de nuevo.'; }
+    };
+  }
+  result.appendChild(playBtn); result.appendChild(markBtn);
+  ctrl.appendChild(mic); ctrl.appendChild(transcript);
+  body.appendChild(phrase); body.appendChild(ctrl); body.appendChild(result); body.appendChild(status);
+}
+
+// ══════════════════════════════════
+//  CHAT STATION
+// ══════════════════════════════════
+let chatScenarioKey='intro', chatStep=0, chatMsgCount=0;
+function renderChat(){
+  const pills=document.getElementById('scenarioPills');
+  pills.innerHTML='';
+  Object.entries(CHAT_SCENARIOS).forEach(([key,sc])=>{
+    const p=document.createElement('button'); p.className='scenario-pill'+(key===chatScenarioKey?' active':'');
+    p.textContent=sc.name; p.title=sc.hint;
+    p.onclick=()=>{ chatScenarioKey=key; chatStep=0; chatMsgCount=0; renderChat(); };
+    pills.appendChild(p);
+  });
+  const msgs=document.getElementById('chatMessages');
+  msgs.innerHTML='';
+  chatStep=0; chatMsgCount=0;
+  addBotMsg(CHAT_SCENARIOS[chatScenarioKey].steps[0].bot);
+  updateSuggestions(); updateProgress();
+  const input=document.getElementById('chatInput');
+  input.value=''; input.onkeydown=e=>{ if(e.key==='Enter') chatSend(); };
+  const micBtn=document.getElementById('chatMicBtn');
+  micBtn.onclick=startChatMic;
+}
+
+function addBotMsg(text){
+  const msgs=document.getElementById('chatMessages');
+  const d=document.createElement('div'); d.className='chat-msg bot';
+  const spk=document.createElement('button'); spk.className='chat-speak-btn'; spk.textContent='🔊';
+  spk.onclick=()=>speak(text,0.8);
+  d.innerHTML=`<div class="chat-avatar">🤖</div><div><div class="chat-bubble">${text}</div><div class="chat-hint">Toca 🔊 para escuchar</div></div>`;
+  d.querySelector('.chat-bubble').after(spk);
+  msgs.appendChild(d);
+  setTimeout(()=>{ msgs.scrollTop=msgs.scrollHeight; speak(text,0.82); },150);
+}
+
+function addUserMsg(text){
+  const msgs=document.getElementById('chatMessages');
+  const d=document.createElement('div'); d.className='chat-msg user';
+  d.innerHTML=`<div class="chat-avatar">😊</div><div class="chat-bubble">${text}</div>`;
+  msgs.appendChild(d); chatMsgCount++;
+  setTimeout(()=>msgs.scrollTop=msgs.scrollHeight,50);
+}
+
+function chatSend(){
+  const input=document.getElementById('chatInput');
+  const text=(input.value||'').trim();
+  if(!text) return;
+  input.value='';
+  addUserMsg(text);
+  const sc=CHAT_SCENARIOS[chatScenarioKey];
+  const step=sc.steps[chatStep];
+  const userNorm=norm(text);
+  const matched=step.expect.some(e=>userNorm.includes(e));
+  setTimeout(()=>{
+    if(chatStep<sc.steps.length-1){
+      chatStep++;
+      addBotMsg(sc.steps[chatStep].bot);
+      updateSuggestions(); updateProgress();
+    } else {
+      addBotMsg("Great conversation! 🎉 You did amazing! Try another scenario or come back to practice again. Your English is improving!");
+      document.getElementById('chatSuggestions').innerHTML='<span style="color:var(--green);font-size:13px;font-weight:700;padding:4px;">✅ Conversación completada!</span>';
+      document.getElementById('chatProgress').textContent='🌟 ¡Completaste el escenario! Intenta otro.';
+    }
+    if(!matched && chatStep<sc.steps.length){
+      setTimeout(()=>{
+        const hint=document.createElement('div');
+        hint.className='chat-msg bot';
+        hint.innerHTML=`<div class="chat-avatar">🤖</div><div class="chat-bubble" style="background:rgba(245,179,66,.15);border:1px solid rgba(245,179,66,.3);">💡 Tip: Try using one of the suggested phrases below — they're a great start!</div>`;
+        document.getElementById('chatMessages').appendChild(hint);
+        document.getElementById('chatMessages').scrollTop=999999;
+      },1200);
+    }
+  },600);
+}
+
+function updateSuggestions(){
+  const sc=CHAT_SCENARIOS[chatScenarioKey];
+  const box=document.getElementById('chatSuggestions');
+  if(chatStep>=sc.steps.length){ box.innerHTML=''; return; }
+  box.innerHTML='<span style="font-size:11px;color:var(--ink-soft);width:100%;display:block;margin-bottom:4px;">💬 Sugerencias:</span>';
+  (sc.steps[chatStep].sugg||[]).forEach(s=>{
+    const p=document.createElement('button'); p.className='sugg-pill'; p.textContent=s;
+    p.onclick=()=>{ document.getElementById('chatInput').value=s; document.getElementById('chatInput').focus(); };
+    box.appendChild(p);
+  });
+}
+
+function updateProgress(){
+  const sc=CHAT_SCENARIOS[chatScenarioKey];
+  document.getElementById('chatProgress').textContent=`Paso ${Math.min(chatStep+1,sc.steps.length)} de ${sc.steps.length}`;
+}
+
+function startChatMic(){
+  if(!SR){ alert('Tu navegador no soporta micrófono. Usa Chrome.'); return; }
+  const btn=document.getElementById('chatMicBtn');
+  if(activeRecognizer){try{activeRecognizer.stop();}catch(e){}}
+  btn.classList.add('recording');
+  const r=createRecognizer(text=>{
+    document.getElementById('chatInput').value=text;
+    chatSend();
+  },()=>{ btn.classList.remove('recording'); });
+  activeRecognizer=r;
+  try{ r.start(); }catch(e){ btn.classList.remove('recording'); }
+}
+
+// ══════════════════════════════════
+//  MARK SOLVED + FX
+// ══════════════════════════════════
+function markSolved(t,idx,wrap){
+  progress[t.id][idx]=true;
+  wrap.classList.add('solved');
+  wrap.querySelector('.exo-check').textContent='✓';
+  burstStars(wrap); updatePill();
+  if(topicDone(t)) document.getElementById('tvDone').classList.add('show');
+}
+
+function burstStars(el){
+  const r=el.getBoundingClientRect();
+  for(let i=0;i<8;i++){
+    const s=document.createElement('div'); s.textContent='⭐';
+    s.style.cssText=`position:fixed;left:${r.left+r.width/2}px;top:${r.top+18}px;font-size:${12+Math.random()*10}px;z-index:99;pointer-events:none;`;
+    const dx=(Math.random()-.5)*160, dy=-60-Math.random()*80;
+    s.style.setProperty('--dx',dx+'px'); s.style.setProperty('--dy',dy+'px');
+    s.style.animation='burst .9s ease-out forwards';
+    document.body.appendChild(s); setTimeout(()=>s.remove(),950);
+  }
+}
+
+renderMap();
+</script>
+<script>
+</script>
