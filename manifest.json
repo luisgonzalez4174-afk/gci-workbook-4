@@ -1,18 +1,13 @@
 {
   "name": "GCI Galaxy · Workbook 4",
   "short_name": "GCI WB4",
-  "description": "Repaso interactivo del GCI Workbook 4 — Nivel B1+",
-  "start_url": "/",
+  "description": "Repaso interactivo de inglés — GCI Galaxy Workbook 4",
+  "start_url": "./",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#0F0820",
   "theme_color": "#6A33A8",
+  "lang": "es",
   "icons": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%236A33A8'/><text y='.9em' font-size='72' x='50%' dominant-baseline='middle' text-anchor='middle'>🪐</text></svg>",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }
