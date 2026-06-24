@@ -232,6 +232,20 @@ body{
 .donebar.show{display:flex;animation:popin .4s ease both;}
 footer{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:30px;opacity:.7;}
 @media(min-width:560px){.hero h2{font-size:25px;}}
+
+/* ─── Install FAB ─── */
+#installBtn{
+  display:none;position:fixed;bottom:28px;right:18px;z-index:999;
+  align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--magenta),var(--purple));
+  color:#fff;border:none;
+  font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;
+  padding:14px 22px;border-radius:999px;cursor:pointer;
+  box-shadow:0 6px 24px rgba(212,79,160,.55),0 2px 8px rgba(0,0,0,.4);
+  animation:pulse 2.2s ease-in-out infinite;
+  white-space:nowrap;
+}
+#installBtn:active{transform:scale(.95);}
 </style>
 </head>
 <body>
@@ -243,7 +257,6 @@ footer{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:30px;
       <div class="brand-text"><h1>GCI Galaxy</h1><p>Misión de Repaso · WB4</p></div>
     </div>
     <div class="score-pill">⭐ <span id="scoreText">0/0</span></div>
-    <button id="installBtn" style="display:none;align-items:center;gap:5px;background:linear-gradient(145deg,#6A33A8,#4B1F86);color:#fff;border:none;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12.5px;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;" onclick="installApp()">⬇️ Instalar</button>
   </div>
 
   <div id="mapview">
@@ -1625,6 +1638,8 @@ function burstStars(el){
 renderMap();
 </script>
 <script>
+// ── Install button DOM ──
+document.body.insertAdjacentHTML('beforeend','<button id="installBtn" onclick="installApp()">📲 Instalar App</button>');
 // ── PWA Install ──
 let _installPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
