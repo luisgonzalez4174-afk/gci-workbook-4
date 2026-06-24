@@ -1,4 +1,4 @@
-const CACHE = 'gci-wb4-v2';
+const CACHE = 'gci-wb4-v3';
 const ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', e => {
@@ -7,12 +7,16 @@ self.addEventListener('install', e => {
 });
 
 self.addEventListener('activate', e => {
-  e.waitUntil(clients.claim());
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', e => {
   if (e.request.mode === 'navigate') {
-    e.respondWith(caches.match('./index.html').then(r => r || fetch(e.request)));
+    e.respondWith(fetch(e.request).catch(() => caches.match('./index.html')));
   } else {
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => new Response('', {status: 408}))));
   }
