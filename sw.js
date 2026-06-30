@@ -1,5 +1,5 @@
-const CACHE = 'gci-wb4-v3';
-const ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
+const CACHE = 'gci-wb4-v4';
+const ASSETS = ['./', './index.html', './manifest.json', './icon.svg', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
